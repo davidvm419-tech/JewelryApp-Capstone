@@ -1,0 +1,210 @@
+JewelryApp-Capstone — Functional Specifications
+==============================================
+
+1. Landing Page (Public)
+------------------------
+- Serves as a visual welcome screen for the application.
+- Displays a background image or design chosen by the store owner.
+- Includes a welcome message or branding text.
+- Contains a button (e.g., “View Products”) that loads the main product view.
+- Does not display products directly.
+
+2. Main Product View (Public)
+-----------------------------
+- Displays the general list of products.
+- Products may appear randomized or simply as the most recent.
+- Each product card shows:
+  - Main image
+  - Name
+  - Price
+  - Average rating
+- Accessible to all users (no login required).
+
+3. Individual Product View (Public)
+-----------------------------------
+- Any user can open a product and see:
+  - Name
+  - Price
+  - Description
+  - Materials
+  - Average rating
+  - Comments from other users
+  - Photo gallery (if multiple images exist)
+
+- Actions requiring login:
+  - Leave a rating (1–5 stars)
+  - Write a comment
+  - Edit or delete own comments
+  - Add product to wishlist
+
+4. Categories View (Login Required)
+-----------------------------------
+- Authenticated users can:
+  - View available categories
+  - Filter products by category
+  - Sort products by:
+    - Price
+    - Rating
+    - Date added
+
+5. Wishlist (Login Required)
+----------------------------
+- Authenticated users can:
+  - Add any product to their wishlist
+  - Remove products from wishlist
+  - View all saved items in a dedicated wishlist page
+  - Move items from wishlist to cart
+- Wishlist is stored in the backend and tied to the user account.
+
+6. Shopping Cart (Login Required)
+---------------------------------
+- Authenticated users can:
+  - Add products to the cart
+  - Change quantities
+  - Remove items
+  - View total cost
+  - Proceed to checkout
+
+- Cart may use:
+  - Local persistence (localStorage)
+  - Backend synchronization when logged in
+
+7. Ready-to-Purchase View (Login Required)
+------------------------------------------
+- Before completing a purchase, the user sees:
+  - Summary of selected products
+  - Quantities
+  - Total price
+  - Required personal information (address, etc.)
+
+8. User Profiles
+----------------
+Each user has:
+- Username
+- Password
+- Email
+- Phone number
+
+Profile features:
+- View and edit personal information
+- View purchase history
+- View own ratings and comments
+- View wishlist
+
+9. Admin User (Django Admin Panel)
+----------------------------------
+- A designated admin user (e.g., the store owner) can log into the Django admin panel.
+- Admin capabilities:
+  - Create, edit, and delete products
+  - Upload and manage product images
+  - Create and manage categories
+  - Manage pricing
+  - View and manage orders
+  - View user accounts
+- Admin panel is accessed through:
+  /admin
+- Django Admin is used as the management system.
+
+10. Backend Responsibilities (Django)
+------------------------------------
+The backend controls all interactions:
+- Authentication (login, logout, register)
+- CRUD for:
+  - Products
+  - Categories
+  - Photos
+  - Ratings
+  - Comments
+  - Wishlist items
+  - Cart items
+  - Orders
+- Validations and permissions:
+  - Only logged users can comment, rate, wishlist, or use the cart
+  - Users can only edit/delete their own comments
+- API JSON for all operations
+- Security and data integrity
+
+11. SPA Architecture (Frontend)
+-------------------------------
+- Navigation handled entirely by JavaScript (no full page reloads)
+- Frontend routes:
+  - /products
+  - /products/:id
+  - /categories/
+  - /wishlist
+  - /cart
+  - /checkout
+  - /profile
+  - /orders/:id
+
+- Dynamic rendering of views
+- Global state for:
+  - Authenticated user
+  - Cart
+  - Wishlist
+  - Filters and sorting
+
+
+Models
+
+User (Abstract user from Django)
+
+Product
+    id
+    Name
+    Category id
+    Description
+    materials Text field
+    price (fixed from the model)
+    Created at  (for the random view and filter)
+    Updated at (for product updates)
+
+Category
+    id
+    name
+    slug
+
+ProductImage
+    id
+    Product id
+    image field(as reference on folders or updated)
+
+Comment
+    id
+    User id
+    Product id
+    comment text
+    Created at
+
+Rating
+    id
+    User id
+    Product id
+    rating (int 'show as stars in view')
+    Created at
+
+Wishlist
+    id
+    user id
+    product id
+    Added at
+
+CartItem
+    id
+    User id
+    Product id
+    Quantity (int)
+    Added at
+
+OrderItem
+    id
+    order id
+    product id
+    Quantity
+    Price at purchase
+
+Order
+    id
+    User id
+    Total price
+    Created at   
