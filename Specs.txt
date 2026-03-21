@@ -86,7 +86,7 @@ Each user has:
 - Phone number
 
 Profile features:
-- View and edit personal information
+- View, edit personal information and Password 
 - View purchase history
 - View own ratings and comments
 - View wishlist
@@ -99,6 +99,7 @@ Profile features:
   - Upload and manage product images
   - Create and manage categories
   - Manage pricing
+  - Manage product quantities
   - View and manage orders
   - View user accounts
 - Admin panel is accessed through:
@@ -145,66 +146,4 @@ The backend controls all interactions:
   - Filters and sorting
 
 
-Models
-
-User (Abstract user from Django)
-
-Product
-    id
-    Name
-    Category id
-    Description
-    materials Text field
-    price (fixed from the model)
-    Created at  (for the random view and filter)
-    Updated at (for product updates)
-
-Category
-    id
-    name
-    slug
-
-ProductImage
-    id
-    Product id
-    image field(as reference on folders or updated)
-
-Comment
-    id
-    User id
-    Product id
-    comment text
-    Created at
-
-Rating
-    id
-    User id
-    Product id
-    rating (int 'show as stars in view')
-    Created at
-
-Wishlist
-    id
-    user id
-    product id
-    Added at
-
-CartItem
-    id
-    User id
-    Product id
-    Quantity (int)
-    Added at
-
-OrderItem
-    id
-    order id
-    product id
-    Quantity
-    Price at purchase
-
-Order
-    id
-    User id
-    Total price
-    Created at   
+pip install Pillow for the images upload
