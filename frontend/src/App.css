@@ -1,0 +1,99 @@
+/* form container */
+.form-container {
+  width: 350px;
+  margin: 40px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Inputs */
+.form-container input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #C9D6E2;
+  font-size: 15px;
+  background: #F4F7FA;
+}
+
+.form-container input:focus {
+  border-color: #2F6FA3;
+  outline: none;
+}
+
+/* Button */
+.form-container button {
+  padding: 12px;
+  background: #1B3A57; /* lighter professional blue */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.15s ease;
+}
+
+/* SUPER OBVIOUS HOVER */
+.form-container button:hover {
+  background: #102A40; /* darker contrast */
+  transform: translateY(-2px); /* subtle lift */
+}
+
+/* Error or success messages */
+.error {
+  color: #b00020;
+  background: #ffe5e8;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.message {
+  color: #0a7a3d;
+  background: #e6f7ed;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Link */
+.link {
+  color: #2F6FA3; /* accent blue */
+  cursor: pointer;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* Inputs */
+.form-container input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #C9D6E2;
+  font-size: 15px;
+  background: #F4F7FA;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+/* Hover: user moves mouse over input */
+.form-container input:hover {
+  border-color: #2F6FA3;
+  background: #FFFFFF;
+}
+
+/* Focus: user clicks inside input */
+.form-container input:focus {
+  border-color: #2F6FA3;
+  background: #FFFFFF;
+  outline: none;
+}

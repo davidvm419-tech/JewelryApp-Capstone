@@ -83,7 +83,8 @@ Each user has:
 - Username
 - Password
 - Email
-- Phone number
+- First Name
+- Last Name 
 
 Profile features:
 - View, edit personal information and Password 
@@ -147,3 +148,8 @@ The backend controls all interactions:
 
 
 pip install Pillow for the images upload
+
+
+npx create-react-app frontend
+
+npm install react-router-dom

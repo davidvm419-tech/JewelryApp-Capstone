@@ -26,13 +26,20 @@ SECRET_KEY = 'django-insecure-rq!6e-w58#d982s=w-nx7vs_a_lhlr7y&j*f6ge#_4w9lvr7jn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "https://localhost:3000",
+]
+
 
 
 # Application definition
 
 INSTALLED_APPS = [
     "store",
+    "corsheaders",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +49,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -69,6 +77,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -129,3 +138,22 @@ STATICFILES_DIRS = [
 # Load images on the media folder
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# React and Django are on different ports to allow CORS
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+CSRF_COOKIE_HTTPONLY = False  
+
+
+CORS_ALLOW_CREDENTIALS = True
+
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
