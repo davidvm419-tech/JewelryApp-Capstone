@@ -81,29 +81,33 @@ function Register({registerSuccess}) {
     }
 
     return (
-        <form className="form-container" onSubmit={handleSubmit}>
-            
-            <h2>Create an account</h2>
-            
-            {/* Display messages from backend */}
-            {error && <p className="error">{error}</p>}
-            {message && <p className="message">{message}</p>}
+        <div className="min-h-screen bg-[#F4F7FA] flex items-center justify-center px-4">
+            <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">   
+                <form className="form-container" onSubmit={handleSubmit}>
+                    
+                    <h2>Create an account</h2>
+                    
+                    {/* Display messages from backend */}
+                    {error && <p className="error">{error}</p>}
+                    {message && <p className="message">{message}</p>}
 
-            <input type="text" name="name" value={formData.name}
-            onChange={handleChange} autoFocus placeholder="Name" required/>
-            <input type="text" name="last_name" value={formData.last_name}
-            onChange={handleChange} placeholder="Last Name" required/>
-            <input type="email" name="email" value={formData.email}
-            onChange={handleChange} placeholder="Email Adress"/>
-            <input type="text" name="username" value={formData.username} 
-            onChange={handleChange} placeholder="Username" required/>
-            <input type="password" name="password" value={formData.password}
-            onChange={handleChange} placeholder="Password" required/>
-            <input type="password" name="confirmation" value={formData.confirmation}
-            onChange={handleChange} placeholder="Confirm your password" required/>
-            <button type="submit">Register!</button>
-            <h2 onClick={() => navigation("/login")} className="link">Already registered?</h2>
-        </form>
+                    <input type="text" name="name" value={formData.name}
+                    onChange={handleChange} autoFocus placeholder="Name" required/>
+                    <input type="text" name="last_name" value={formData.last_name}
+                    onChange={handleChange} placeholder="Last Name" required/>
+                    <input type="email" name="email" value={formData.email}
+                    onChange={handleChange} placeholder="Email Adress"/>
+                    <input type="text" name="username" value={formData.username} 
+                    onChange={handleChange} placeholder="Username" required/>
+                    <input type="password" name="password" value={formData.password}
+                    onChange={handleChange} placeholder="Password" required/>
+                    <input type="password" name="confirmation" value={formData.confirmation}
+                    onChange={handleChange} placeholder="Confirm your password" required/>
+                    <button type="submit">Register!</button>
+                    <h2 onClick={() => navigation("/login")} className="link">Already registered?</h2>
+                </form>
+            </div>
+        </div>
     );
 }
 

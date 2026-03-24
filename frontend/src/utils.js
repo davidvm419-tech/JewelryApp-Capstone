@@ -21,7 +21,6 @@ return cookieValue;
 
 
 // Utility function to get user status to the frontend
-
 export async function fetchSession() {
     try {
         const response = await fetch(`/api/get_session/`, { 
@@ -30,5 +29,17 @@ export async function fetchSession() {
         return await response.json()
     } catch (err) {
         return {is_authenticated: false}
+    }
+}
+
+// Utility function to get product data to the frontend
+export async function fetchCatalog() {
+    try {
+        const response = await fetch("/api/catalog?page=1/", {
+            credentials: "include",
+        });
+        return await response.json() 
+    } catch (err) {
+        return `Error: ${err}`
     }
 }

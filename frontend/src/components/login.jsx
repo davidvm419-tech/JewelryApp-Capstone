@@ -74,21 +74,25 @@ function Login({loginSuccess}) {
     }
 
     return (
-        <form className="form-container" onSubmit={handleSubmit}>
-            
-            <h2>Welcome back!</h2>
-            
-            {/* Display messages from backend */}
-            {error && <p className="error">{error}</p>}
-            {message && <p className="message">{message}</p>}
+        <div className="min-h-screen bg-[#F4F7FA] flex items-center justify-center px-4">
+            <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">   
+                <form className="form-container" onSubmit={handleSubmit}>
+                    
+                    <h2>Welcome back!</h2>
+                    
+                    {/* Display messages from backend */}
+                    {error && <p className="error">{error}</p>}
+                    {message && <p className="message">{message}</p>}
 
-            <input type="text" name="identification" value={formData.identification}
-            onChange={handleChange} autoFocus placeholder="Username or email" required/>
-            <input type="password" name="password" value={formData.password}
-            onChange={handleChange} placeholder="Password" required/>
-            <button type="submit">Login!</button>
-            <h2 onClick={() => navigation("/register")} className="link">Don't have an account?</h2>
-        </form>
+                    <input type="text" name="identification" value={formData.identification}
+                    onChange={handleChange} autoFocus placeholder="Username or email" required/>
+                    <input type="password" name="password" value={formData.password}
+                    onChange={handleChange} placeholder="Password" required/>
+                    <button type="submit">Login!</button>
+                    <h2 onClick={() => navigation("/register")} className="link">Don't have an account?</h2>
+                </form>
+            </div>
+        </div>
     )
 } 
 

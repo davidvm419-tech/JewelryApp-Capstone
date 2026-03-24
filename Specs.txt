@@ -1,7 +1,7 @@
 JewelryApp-Capstone — Functional Specifications
 ==============================================
 
-1. Landing Page (Public)
+1. Landing Page (Public) (Ok)
 ------------------------
 - Serves as a visual welcome screen for the application.
 - Displays a background image or design chosen by the store owner.
@@ -92,7 +92,7 @@ Profile features:
 - View own ratings and comments
 - View wishlist
 
-9. Admin User (Django Admin Panel)
+9. Admin User (Django Admin Panel) (Ok)
 ----------------------------------
 - A designated admin user (e.g., the store owner) can log into the Django admin panel.
 - Admin capabilities:
@@ -107,7 +107,7 @@ Profile features:
   /admin
 - Django Admin is used as the management system.
 
-10. Backend Responsibilities (Django)
+10. Backend Responsibilities (Django) (Ok)
 ------------------------------------
 The backend controls all interactions:
 - Authentication (login, logout, register)
@@ -126,7 +126,7 @@ The backend controls all interactions:
 - API JSON for all operations
 - Security and data integrity
 
-11. SPA Architecture (Frontend)
+11. SPA Architecture (Frontend) (Ok)
 -------------------------------
 - Navigation handled entirely by JavaScript (no full page reloads)
 - Frontend routes:
@@ -145,6 +145,7 @@ The backend controls all interactions:
   - Cart
   - Wishlist
   - Filters and sorting
+
 
 
 pip install Pillow for the images upload

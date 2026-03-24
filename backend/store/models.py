@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 from django.db import models
+from django.db.models import Avg
 from django.utils import timezone
 
 # Create your models here.
@@ -12,6 +13,7 @@ class User(AbstractUser):
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    # To keep a standar category
     slug = models.SlugField(unique=True)
 
     def __str__(self):
@@ -28,6 +30,42 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.name
+    
+    # Add main image to the product catalog
+    def main_image(self, request):
+        first_image = self.images.first()
+        if first_image:
+            return request.build_absolute_uri(first_image.image.url)
+        else:
+            return None
+
+    def serialize(self, request):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "category": self.category.slug,
+            "description": self.description,
+            "quantity": self.quantity,
+            "materials": self.materials,
+            # Float convertion to avoid errors
+            "price": float(self.price),
+            # Main image
+            "main_image": self.main_image(request),
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+
+            # Serialize another  product information right away
+            "ratings": [rating.serialize() for rating in self.ratings.all()],
+            # Avg returns a dict avg= and ["avg"] returns {"rating_avg": 3.5}
+            "rating_avg": (
+                self.ratings.aggregate(avg=Avg("rating"))["avg"]
+                if self.ratings.exists() else None
+                ),
+            "comments": [comment.serialize() for comment in self.comments.all()], 
+        }
+
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
@@ -37,6 +75,15 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.name}"
+        
+    def serialize(self, request=None):
+        return {
+            "id": self.id,
+            "product_id": self.product.id,
+            # Requiered to send the absolute path of the image
+            "image": request.build_absolute_uri(self.image.url),
+            "alt_text": self.alt_text,
+        }
 
 
 class Comment(models.Model):
@@ -44,6 +91,15 @@ class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="comments")
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "product_id": self.product.id,
+            "username": self.user.username,
+            "comment": self.comment,
+            "created_at": self.created_at, 
+        }
 
 
 class Rating(models.Model):
@@ -57,6 +113,15 @@ class Rating(models.Model):
     # Avoid duplicate ratings from the model itself
     class Meta:
         unique_together = ("user", "product")
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "product_id": self.product.id,
+            "username": self.user.username,
+            "rating": self.rating,
+            "created_at": self.created_at, 
+        }
 
 
 class Wishlist(models.Model):
