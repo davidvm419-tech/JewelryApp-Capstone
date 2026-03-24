@@ -1,3 +1,4 @@
+@import "tailwindcss";
 /* form container */
 .form-container {
   width: 350px;
@@ -28,7 +29,7 @@
 /* Button */
 .form-container button {
   padding: 12px;
-  background: #1B3A57; /* lighter professional blue */
+  background: #1B3A57; 
   color: white;
   border: none;
   border-radius: 8px;
@@ -37,10 +38,10 @@
   transition: background 0.25s ease, transform 0.15s ease;
 }
 
-/* SUPER OBVIOUS HOVER */
+/* Hover */
 .form-container button:hover {
-  background: #102A40; /* darker contrast */
-  transform: translateY(-2px); /* subtle lift */
+  background: #102A40; 
+  transform: translateY(-2px); 
 }
 
 /* Error or success messages */
@@ -64,7 +65,7 @@
 
 /* Link */
 .link {
-  color: #2F6FA3; /* accent blue */
+  color: #2F6FA3; 
   cursor: pointer;
   text-align: center;
   margin-top: 10px;
@@ -85,13 +86,13 @@
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-/* Hover: user moves mouse over input */
+/* Hover: on input box */
 .form-container input:hover {
   border-color: #2F6FA3;
   background: #FFFFFF;
 }
 
-/* Focus: user clicks inside input */
+/* Focus: user clicks input box */
 .form-container input:focus {
   border-color: #2F6FA3;
   background: #FFFFFF;

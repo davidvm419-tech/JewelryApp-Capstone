@@ -153,3 +153,9 @@ pip install Pillow for the images upload
 npx create-react-app frontend
 
 npm install react-router-dom
+
+npm install tailwindcss @tailwindcss/vite
+
+navbar
+npm install @headlessui/react @heroicons/react
+

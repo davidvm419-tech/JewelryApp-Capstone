@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 import json
 
@@ -15,10 +16,13 @@ from .models import (Category, CartItem, Comment, Order, OrderItem, Product,
 
 # Create your views here.
 
-def get_csrf_token(request):
-    # Generate and return a CSRF token for the client to use
-    token = get_token(request)
-    return JsonResponse({'token': token})
+def get_session(request):
+    # Generate token and send user information if is authenticated for landing page and dashboard
+    return JsonResponse({
+        "token": get_token(request),
+        "is_authenticated": request.user.is_authenticated,
+        "username": request.user.username if request.user.is_authenticated else None,    
+        })
     
 
 def login_view(request):
@@ -116,7 +120,7 @@ def register_view(request):
     login(request, user)
     return JsonResponse({"message": "User successfully created!"}, status=200) 
 
-
+@require_POST
 def logout_view(request):
     # Confirm post method 
     if request.method != "POST":

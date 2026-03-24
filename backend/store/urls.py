@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     # Send the CSRF token to the client so it can be included in subsequent requests
-    path("api/get-csrf-token/", views.get_csrf_token, name="get_csrf"),
+    path("api/get_session/", views.get_session, name="get_session"),
     
     # User paths (remember the ending / so react and Django communicate)
     path("api/register/", (views.register_view), name="register"),

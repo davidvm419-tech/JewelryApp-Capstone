@@ -3,7 +3,7 @@
  * https://djangoproject.com
  */
 
-function getCookie(name) {
+export function getCookie(name) {
 let cookieValue = null;
 if (document.cookie && document.cookie !== '') {
     const cookies = document.cookie.split(';');
@@ -18,4 +18,17 @@ if (document.cookie && document.cookie !== '') {
 return cookieValue;
 }
 
-export default getCookie;
+
+
+// Utility function to get user status to the frontend
+
+export async function fetchSession() {
+    try {
+        const response = await fetch(`/api/get_session/`, { 
+          credentials: "include", 
+        });
+        return await response.json()
+    } catch (err) {
+        return {is_authenticated: false}
+    }
+}

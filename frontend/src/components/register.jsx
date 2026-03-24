@@ -1,8 +1,9 @@
-import getCookie from "../utils";
+import React from 'react';
+import {getCookie} from "../utils";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
-function Register() {
+function Register({registerSuccess}) {
     // navigation to login
     const navigation = useNavigate();
 
@@ -37,7 +38,7 @@ function Register() {
         setMessage("")
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/register/`, {
+            const response = await fetch(`/api/register/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -63,6 +64,16 @@ function Register() {
                     name: "",
                     last_name: "",
                 })
+
+                // Tell react to refresh the authentication state
+                if (registerSuccess) {
+                    // redirect user to catalog but first wait 3 seconds to avoid react wining a race condition
+                    setTimeout(() => {
+                        registerSuccess()
+                        navigation("/catalog") 
+                    }, 3000)
+        
+                }
             }
         } catch (err) {
             setError("An error has ocurried, please try again later")

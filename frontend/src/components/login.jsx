@@ -1,9 +1,10 @@
-import getCookie from "../utils";
+import React from 'react';
+import {getCookie} from "../utils";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-export default function Login() {
-
+function Login({loginSuccess}) {
+    // navigation
     const navigation = useNavigate();
     // Set form state
     const [formData, setFormData] = useState({
@@ -33,7 +34,7 @@ export default function Login() {
         setMessage("")
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/login/`, {
+            const response = await fetch(`/api/login/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -55,6 +56,16 @@ export default function Login() {
                 })
             } else {
                 setMessage(data.message)
+
+                // Tell react to refresh the authentication state
+                if (loginSuccess) {
+                    // redirect user to catalog but first wait 3 seconds to avoid react wining a race condition
+                    setTimeout(() => {
+                        loginSuccess()
+                        navigation("/catalog")
+                    }, 3000)
+                }
+
             }
         } catch (err) {
             setError("An error has ocurried, please try again later")
@@ -80,3 +91,5 @@ export default function Login() {
         </form>
     )
 } 
+
+export default Login;
