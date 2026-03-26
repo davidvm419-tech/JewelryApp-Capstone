@@ -12,7 +12,8 @@ function LandingPage() {
 
     // Call the fetch function
     useEffect(() => {
-        fetchCatalog().then(data => {
+        fetchCatalog()
+        .then(data => {
             // Pick 6 random images from the first page of the catalog
             const randomProducts = data.products.sort(() => Math.random() - 0.5).slice(0, 6)
             setProducts(randomProducts)

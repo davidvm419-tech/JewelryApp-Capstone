@@ -8,7 +8,8 @@ urlpatterns = [
 
     # landing page and products views
     path("api/catalog", views.catalog, name="catalog"),
-    path("api/images/", views.images, name="images"),
+    path("api/product/<int:product_id>", views.product_details, name="product-details"),
+    path("api/images/<int:product_id>", views.images, name="images"),
     
     # User paths (remember the ending / so react and Django communicate)
     path("api/register/", (views.register_view), name="register"),

@@ -9,7 +9,7 @@ JewelryApp-Capstone — Functional Specifications
 - Contains a button (e.g., “View Products”) that loads the main product view.
 - Does not display products directly.
 
-2. Main Product View (Public)
+2. Main Product View (Public) (Ok)
 -----------------------------
 - Displays the general list of products.
 - Products may appear randomized or simply as the most recent.

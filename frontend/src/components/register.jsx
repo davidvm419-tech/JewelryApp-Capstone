@@ -71,7 +71,7 @@ function Register({registerSuccess}) {
                     setTimeout(() => {
                         registerSuccess()
                         navigation("/catalog") 
-                    }, 3000)
+                    }, 2000)
         
                 }
             }

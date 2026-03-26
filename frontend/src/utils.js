@@ -33,9 +33,9 @@ export async function fetchSession() {
 }
 
 // Utility function to get product data to the frontend
-export async function fetchCatalog() {
+export async function fetchCatalog(page=1) {
     try {
-        const response = await fetch("/api/catalog?page=1/", {
+        const response = await fetch(`/api/catalog?page=${page}`, {
             credentials: "include",
         });
         return await response.json() 

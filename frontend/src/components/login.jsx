@@ -63,7 +63,7 @@ function Login({loginSuccess}) {
                     setTimeout(() => {
                         loginSuccess()
                         navigation("/catalog")
-                    }, 3000)
+                    }, 2000)
                 }
 
             }

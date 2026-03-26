@@ -6,14 +6,15 @@ from django.core.validators import validate_email
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
-from django.shortcuts import get_object_or_404, render
-from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 
 import json
 
 from .models import (Category, CartItem, Comment, Order, OrderItem, Product, 
                      ProductImage, Rating, User, Wishlist)
+
+from .helpers import paginate
 
 # Create your views here.
 
@@ -30,42 +31,26 @@ def get_session(request):
 def catalog(request):
     products_catalog = Product.objects.all().order_by("-created_at")
 
-    # 12 products per page
-    paginator = Paginator(products_catalog, 12)
-    
-    # Get page number
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    # Pass valid or invalid page
-    if page_obj.has_next():
-        next_page = page_obj.next_page_number()
-    else:
-        next_page = None
-
-    if page_obj.has_previous():
-        prev_page = page_obj.previous_page_number()
-    else:
-        prev_page = None
+    # function to create pagination sending the objects to paginate and the page
+    page_obj, pagination = paginate(products_catalog, request.GET.get("page"))    
 
     # Return JSON response
     return JsonResponse({
         "products": [product.serialize(request) for product in page_obj.object_list],
-        "pagination": {
-            "total_pages": paginator.num_pages,
-            "current_page": page_obj.number,
-            "has_previous": page_obj.has_previous(),
-            "has_next": page_obj.has_next(),
-            "next_page": next_page,
-            "prev_page": prev_page,
-        }
+        "pagination": pagination
         }, status=200)
 
-# Images for product sections (REFACTOR TO THE IMAGES FOR THE PRODUCT)
-def images(request):
-    images = ProductImage.objects.all()
+
+# Function to get product details
+def product_details(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    return JsonResponse(product.serialize(request), status=200)
+
+# Images for product section
+def images(request, product_id):
+    images = ProductImage.objects.filter(pk=product_id)
     # Request to send the absolute route of the image to the front end
-    return JsonResponse([image.serialize(request) for image in images], safe=False, status=200)
+    return JsonResponse({"images":[image.serialize(request) for image in images]}, safe=False, status=200)
 
 
 # User login registration and logout    

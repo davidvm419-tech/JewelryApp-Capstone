@@ -23,7 +23,7 @@ function Navbar({ isAuthenticated, username, logoutSuccess }) {
   // Logout
 async function handleLogout() {
     try {
-        const response = await fetch("api/logout/", {
+        const response = await fetch("/api/logout/", {
             method: "POST",
             headers: {"X-CSRFToken": getCookie("csrftoken")},
             credentials: "include",
@@ -35,7 +35,7 @@ async function handleLogout() {
           setTimeout(() => {
             logoutSuccess()
             navigate("/")
-          }, 3000)
+          }, 2000)
             logoutSuccess()
         
         }
