@@ -26,6 +26,7 @@ function App() {
   // Set state for user
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState(null);
   // Set state ofr loading to better user experience
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,6 +35,7 @@ function App() {
     fetchSession().then(data => {
       setIsAuthenticated(data.is_authenticated)
       setUsername(data.username)
+      setUserId(data.user_id)
       setIsLoading(false)
     })
   };
@@ -53,7 +55,7 @@ function App() {
         {/* Check if user is login or not to send to the right view */}
         <Route path="/" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <LandingPage />} />
         <Route path="/catalog" element={<Catalog isAuthenticated={isAuthenticated} username={username} logoutSuccess={autCheck} />}/>
-        <Route path="/product/:id" element={<ProductDetails isAuthenticated={isAuthenticated} username={username} logoutSuccess={autCheck} />} />
+        <Route path="/product/:id" element={<ProductDetails isAuthenticated={isAuthenticated} username={username} userId={userId} logoutSuccess={autCheck} />} />
         {/* Avoid users to login or register if they are login */}
         <Route path="/login" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Login loginSuccess={autCheck}/>} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Register registerSuccess={autCheck}/>} />

@@ -31,13 +31,11 @@ async function handleLogout() {
 
         // Update user authentication to false
         if (response.ok) {
-          // redirect user to landing page but wait 3 seconds to avoid react wining a race condition
+          // redirect user to landing page but waith 2 seconds to avoid react wining a race condition
+          logoutSuccess()
           setTimeout(() => {
-            logoutSuccess()
             navigate("/")
-          }, 2000)
-            logoutSuccess()
-        
+          }, 1000)
         }
 
     } catch (err) {
@@ -67,7 +65,7 @@ async function handleLogout() {
           <div className="flex flex-1 items-center justify-center 
           sm:items-stretch sm:justify-start">
             <div className="mr-auto max-w-7xl px-2 sm:px-6 lg:px-8 
-            text-black-500 font-light tracking-[0.3em] 
+            text-black font-light tracking-[0.3em] 
             text-lg uppercase cursor-pointer" onClick={() => navigate('/')}>
               Geraldine Jewels
             </div>

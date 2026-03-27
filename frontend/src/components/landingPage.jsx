@@ -3,8 +3,13 @@ import { useState, useEffect } from 'react';
 import { fetchCatalog } from '../utils';
 import { useNavigate } from "react-router-dom"
 
+// Utility component
+import Loading from '../components/loading';
+
 
 function LandingPage() {
+    // Set state ofr loading to better user experience
+    const [isLoading, setIsLoading] = useState(true);
     // Navigation
     const navigation = useNavigate();
     // Set states
@@ -17,8 +22,13 @@ function LandingPage() {
             // Pick 6 random images from the first page of the catalog
             const randomProducts = data.products.sort(() => Math.random() - 0.5).slice(0, 6)
             setProducts(randomProducts)
+            setIsLoading(false)
         })
     },[])
+
+    if (isLoading) {
+        return  <Loading />
+    }    
 
     return (
         <div className="min-h-screen bg-[#F4F7FA] text-[#1B3A57] flex items-center justify-center">

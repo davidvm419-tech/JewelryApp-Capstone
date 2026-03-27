@@ -42,6 +42,7 @@ class Product(models.Model):
             return None
 
     def serialize(self, request):
+        local_time = timezone.localtime(self.created_at)
         return {
             "id": self.id,
             "name": self.name,
@@ -53,8 +54,8 @@ class Product(models.Model):
             "price": float(self.price),
             # Main image
             "main_image": self.main_image(request),
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
+            "created_at": local_time.strftime(" %d-%m-%Y"),
+            "updated_at": local_time.strftime(" %d-%m-%Y"),
 
             # Serialize another  product information right away
             "ratings": [rating.serialize() for rating in self.ratings.all()],
@@ -93,12 +94,14 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     def serialize(self):
+        local_time = timezone.localtime(self.created_at)
         return {
             "id": self.id,
             "product_id": self.product.id,
+            "user_id": self.user.id,
             "username": self.user.username,
             "comment": self.comment,
-            "created_at": self.created_at, 
+            "created_at": local_time.strftime("Rated at: %d-%m-%Y"), 
         }
 
 
@@ -115,12 +118,14 @@ class Rating(models.Model):
         unique_together = ("user", "product")
 
     def serialize(self):
+        local_time = timezone.localtime(self.created_at)
         return {
             "id": self.id,
             "product_id": self.product.id,
+            "user_id": self.user.id,
             "username": self.user.username,
             "rating": self.rating,
-            "created_at": self.created_at, 
+            "created_at": local_time.strftime("Rated at: %d-%m-%Y"), 
         }
 
 

@@ -3,6 +3,7 @@ import {getCookie} from "../utils";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+
 function Login({loginSuccess}) {
     // navigation
     const navigation = useNavigate();
@@ -72,7 +73,6 @@ function Login({loginSuccess}) {
         }
         
     }
-
     return (
         <div className="min-h-screen bg-[#F4F7FA] flex items-center justify-center px-4">
             <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">   

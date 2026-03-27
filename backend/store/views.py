@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.core.validators import validate_email
 from django.db import IntegrityError
+from django.db.models import Avg
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
@@ -23,21 +24,25 @@ def get_session(request):
     return JsonResponse({
         "token": get_token(request),
         "is_authenticated": request.user.is_authenticated,
-        "username": request.user.username if request.user.is_authenticated else None,    
+        "username": request.user.username if request.user.is_authenticated else None,   
+        "user_id": request.user.id if request.user.is_authenticated else False, 
         })
 
 
 # Products for complete catalog
 def catalog(request):
+
     products_catalog = Product.objects.all().order_by("-created_at")
 
+    items_per_page = 9
+
     # function to create pagination sending the objects to paginate and the page
-    page_obj, pagination = paginate(products_catalog, request.GET.get("page"))    
+    page_obj, pagination = paginate(products_catalog, request.GET.get("page"), items_per_page)    
 
     # Return JSON response
     return JsonResponse({
         "products": [product.serialize(request) for product in page_obj.object_list],
-        "pagination": pagination
+        "pagination": pagination, 
         }, status=200)
 
 
@@ -53,8 +58,95 @@ def images(request, product_id):
     return JsonResponse({"images":[image.serialize(request) for image in images]}, safe=False, status=200)
 
 
-# User login registration and logout    
+# Add a product rating
+@login_required
+def add_rating(request, product_id):
+    # Confirm method
+    if request.method != "POST":
+        return JsonResponse({"error": "Wrong method, POST expected"}, status=400)
+    
+    # Get JSON data
+    try:
+        data = json.loads(request.body)
+    except:
+        return JsonResponse({"error": "Error recieving data, JSON data invalid"}, status=400)
+    
+    # Check valid data (third protection on rating value)
+    try:
+        rating = int(data.get("rating"))
+        if rating < 1 or rating > 5:
+            return JsonResponse({"error": "rating is not a valid number between 1 and 5"}, status=400)
+    except:
+        return JsonResponse({"error": "rating is not a valid number between 1 and 5"}, status=400) 
 
+    # Add rating to database
+    try:
+        new_rating = Rating.objects.create(
+            user=request.user,
+            product=Product.objects.get(pk=product_id),
+            rating=rating,
+            )
+    except IntegrityError:
+        return JsonResponse({"error": "You already rated this product"}, status=400) 
+
+    # Get new values to update state
+    new_avg = Rating.objects.filter(product=product_id).aggregate(avg=Avg("rating"))["avg"]
+    
+    # Return response
+    return JsonResponse({
+        "message": "Thanks for rate this product!",
+        "new_avg": new_avg,
+        "new_rating": new_rating.serialize(),
+        }, status=200)
+
+
+# Edit rating
+@login_required
+def edit_rating(request, product_id):
+    # confirm method
+    if request.method != "PUT":
+        return JsonResponse({"error": "Wrong method, PUT expected"}, status=400)
+    
+    # Get JSON data
+    try:
+        data = json.loads(request.body)
+    except:
+        return JsonResponse({"error": "Error recieving data, JSON data invalid"}, status=400)
+    
+    # Check valid data (third protection on rating value)
+    try:
+        rating = int(data.get("rating"))
+        if rating < 1 or rating > 5:
+            return JsonResponse({"error": "rating is not a valid number between 1 and 5"}, status=400)
+    except:
+        return JsonResponse({"error": "rating is not a valid number between 1 and 5"}, status=400)
+    
+    # Ensure user updating is the same
+    rate_product = get_object_or_404(Rating, user=request.user, product=product_id)
+    if rate_product.user != request.user:
+        return JsonResponse({"error": "Not authorized to update this post"}, status=403)
+
+    # Update data base
+    try:
+        rate_product.rating = rating
+        rate_product.save()
+
+    except IntegrityError:
+        return JsonResponse({"error": "You already rated this product"}, status=400) 
+
+    # Get udpated values
+    new_avg = Rating.objects.filter(product=product_id).aggregate(avg=Avg("rating"))["avg"]
+        
+    #return response
+    return JsonResponse({
+        "message": "Rating updated!",
+        "new_avg": new_avg,
+        "new_rating": rate_product.serialize(),
+        }, status=200)
+
+
+
+# User login 
 def login_view(request):
     # Confirm method
     if request.method != "POST":

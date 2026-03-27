@@ -1,9 +1,9 @@
 from django.core.paginator import Paginator
 
 # Function to paginate a specific page of an object
-def paginate(pagination_object, page_number):
-        # 9 products per page
-    paginator = Paginator(pagination_object, 9)
+def paginate(pagination_object, page_number, items_per_page):
+        # Products per page
+    paginator = Paginator(pagination_object, items_per_page)
     
     # Get page number
 

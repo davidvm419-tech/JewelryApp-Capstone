@@ -3,6 +3,9 @@ import Navbar from './navbar';
 import Footer from './footer';
 import Pagination from './pagination';
 
+// Utility component
+import Loading from '../components/loading';
+
 // Hooks
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -11,6 +14,8 @@ import { Link } from 'react-router-dom';
 import { fetchCatalog } from '../utils';
 
 export default function Catalog({ isAuthenticated, username, logoutSuccess }) {
+  // Set state ofr loading to better user experience
+  const [isLoading, setIsLoading] = useState(true);
   // Set states for products
   const [products, setProducts] = useState([]);
   const [pages, setPages] = useState({});
@@ -21,8 +26,13 @@ export default function Catalog({ isAuthenticated, username, logoutSuccess }) {
     .then(data => {
       setProducts(data.products)
       setPages(data.pagination)
+      setIsLoading(false)
     })
   }, [page])
+
+  if (isLoading) {
+      return  <Loading />
+  }    
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -46,7 +56,7 @@ export default function Catalog({ isAuthenticated, username, logoutSuccess }) {
                   {!product.rating ? (
                     <p className="text-black-400 text-sm">Product not rated yet</p>
                   ) : (
-                    <p className="text-[#1B3A57]-600 font-medium">{product.rating}</p>
+                    <p className="text-[#1B3A57] font-medium">{product.rating}</p>
                   )}
                     <p className="text-xl font-bold text-black">${product.price}</p>
                 </div>
