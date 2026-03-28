@@ -53,7 +53,7 @@ function ProductRatings({ratings, avg_rating, productId, userId}) {
         } else {
             setMessage(data.message)
             setAvgChange(data.new_avg)
-            setRatingChange(prev => [...prev, data.new_rating])
+            setRatingChange(prev => [data.new_rating, ...prev])
         }
         } catch (err) {
             setError(`Error: ${err}`)

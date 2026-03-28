@@ -48,7 +48,7 @@ function ProductComments({ comments, productId, userId }) {
                 setError(data.error) 
             } else {
                 setMessage(data.message)
-                setCommentChange(prev => [...prev, data.new_comment])
+                setCommentChange(prev => [data.new_comment, ...prev])
                 // Clear comment box
                 setCommentInput("")
             }
@@ -155,8 +155,6 @@ function ProductComments({ comments, productId, userId }) {
                 ))}
             </div>
 
-            <hr />
-
             {/* Form Section */}
             <div className="pt-6 border-t border-slate-100">
                 {userId ? (
@@ -198,12 +196,15 @@ function ProductComments({ comments, productId, userId }) {
                             value={commentInput} 
                             onChange={(e) => setCommentInput(e.target.value)} 
                             placeholder="Add a comment..." />
-                            <button className="px-6 py-2 bg-[#2F6FA3] text-white font-bold rounded-lg hover:bg-[#102A40] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm" 
+                            <button className="px-6 py-2 bg-[#2F6FA3] text-white font-bold rounded-lg hover:bg-[#102A40] 
+                            disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm" 
                             disabled={!commentInput.trim()}onClick={handleAddComment}>Post Comment</button>
                         </div>
                     )
                 ) : (
-                     <p className="text-center text-slate-500 italic py-4 bg-slate-50 rounded-lg">Please log in to add a comment.</p>
+                    <div className="p-4 bg-slate-50 rounded-lg border border-dashed border-slate-300 text-center">
+                        <p className="text-slate-500 text-sm font-medium">Please log in to add a comment.</p>
+                    </div>
                 )}
             </div>
         </div>

@@ -108,7 +108,7 @@ function ProductDetails({ isAuthenticated, username, userId, logoutSuccess }) {
                      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full">
                         <ProductRatings ratings={ratings} avg_rating={product.rating_avg} productId={productId} userId={userId} />
                     </div>
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full">                
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-medium">                
                         <ProductComments comments={comments} productId={productId} userId={userId} />
                     </div>
                 </div>

@@ -2,15 +2,16 @@
 https://tailwindcss.com/plus/ui-blocks/application-ui/navigation/navbars
 */
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom';
+
+// Util function
 import { getCookie } from '../utils';
+import { Link } from 'react-router-dom';
 
+// Components
+import Categories from './categories'
 
-// UPDATE WITH NEW FEATURES
-const navigation = [
-  { name: 'Collection', href: '/catalog', current: true },
-]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -69,22 +70,9 @@ async function handleLogout() {
             text-lg uppercase cursor-pointer" onClick={() => navigate('/')}>
               Geraldine Jewels
             </div>
-            <div className="hidden sm:ml-6 sm:block">
-              <div className="flex space-x-4">
-                {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    aria-current={item.current ? 'page' : undefined}
-                    className={classNames(
-                      item.current ? 'bg-[#E0F2FE] text-black' : 
-                      'text-gray-300 hover:bg-white/5 hover:text-white',
-                      'rounded-md px-3 py-2 text-sm font-medium',
-                    )}
-                  >
-                    {item.name}
-                  </a>
-                ))}
+            <div className="hidden sm:ml-6 sm:block items-right">
+              <div className="flex items-center gap-4">
+                <Categories />
               </div>
             </div>
           </div>
@@ -167,21 +155,7 @@ async function handleLogout() {
       {/* Panel for responsive design*/}
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pt-2 pb-3">
-          {navigation.map((item) => (
-            <DisclosureButton
-              key={item.name}
-              as="a"
-              href={item.href}
-              aria-current={item.current ? 'page' : undefined}
-              className={classNames(
-                item.current ? 'bg-[#E0F2FE] text-black' : 
-                'text-gray-300 hover:bg-white/5 hover:text-white', 
-                'block rounded-md px-3 py-2 text-base font-medium',
-              )}
-            >
-              {item.name}
-            </DisclosureButton>
-          ))}
+            <Categories />
         </div>
       </DisclosurePanel>
     </Disclosure>

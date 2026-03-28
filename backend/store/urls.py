@@ -10,6 +10,7 @@ urlpatterns = [
     path("api/catalog", views.catalog, name="catalog"),
     path("api/product/<int:product_id>", views.product_details, name="product-details"),
     path("api/images/<int:product_id>", views.images, name="images"),
+    path("api/categories", views.categories, name="categories"),
 
     # Create, edit and delete paths
     path("api/rating/<int:product_id>", views.add_rating, name="add_rating"),

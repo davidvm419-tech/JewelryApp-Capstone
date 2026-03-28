@@ -28,7 +28,7 @@ export async function fetchSession() {
         });
         return await response.json()
     } catch (err) {
-        return {is_authenticated: false}
+        return {is_authenticated: false};
     }
 }
 
@@ -38,8 +38,8 @@ export async function fetchCatalog(page=1) {
         const response = await fetch(`/api/catalog?page=${page}`, {
             credentials: "include",
         });
-        return await response.json() 
+        return await response.json();
     } catch (err) {
-        return `Error: ${err}`
+        return `Error: ${err}`;
     }
 }

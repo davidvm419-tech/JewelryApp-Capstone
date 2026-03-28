@@ -16,6 +16,10 @@ class Category(models.Model):
     # To keep a standar category
     slug = models.SlugField(unique=True)
 
+    # Order categories alphabetically
+    class Meta:
+        ordering =["name"]
+
     def __str__(self):
         return self.name
 
@@ -93,6 +97,12 @@ class Comment(models.Model):
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     
+    # Avoid duplicate ratings from the model itself and order comments by newest
+    class Meta:
+        unique_together = ("user", "product")
+        ordering = ["-created_at"]
+
+
     def serialize(self):
         local_time = timezone.localtime(self.created_at)
         return {
@@ -103,7 +113,7 @@ class Comment(models.Model):
             "comment": self.comment,
             "created_at": local_time.strftime("Commented at: %d-%m-%Y"), 
         }
-
+    
 
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ratings")
@@ -113,9 +123,10 @@ class Rating(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(5)])
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # Avoid duplicate ratings from the model itself
+    # Avoid duplicate ratings from the model itself and order ratings by newest
     class Meta:
         unique_together = ("user", "product")
+        ordering = ["-created_at"]
 
     def serialize(self):
         local_time = timezone.localtime(self.created_at)
