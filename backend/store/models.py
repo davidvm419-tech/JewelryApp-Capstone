@@ -101,7 +101,7 @@ class Comment(models.Model):
             "user_id": self.user.id,
             "username": self.user.username,
             "comment": self.comment,
-            "created_at": local_time.strftime("Rated at: %d-%m-%Y"), 
+            "created_at": local_time.strftime("Commented at: %d-%m-%Y"), 
         }
 
 

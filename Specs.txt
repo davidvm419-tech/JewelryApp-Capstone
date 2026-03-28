@@ -20,7 +20,7 @@ JewelryApp-Capstone — Functional Specifications
   - Average rating
 - Accessible to all users (no login required).
 
-3. Individual Product View (Public)
+3. Individual Product View (Public) (oK)
 -----------------------------------
 - Any user can open a product and see:
   - Name

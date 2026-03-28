@@ -122,7 +122,7 @@ async function handleLogout() {
                     className="block px-4 py-2 text-sm 
                     text-black data-focus:bg-white/5 data-focus:outline-hidden
                     px-4 py-2 hover:bg-[#E0F2FE] hover:scale-105 transition-all cursor-pointer rounded-md">
-                    Watchlist
+                    Wishlist
                   </a>
                 </MenuItem>
                 <MenuItem>

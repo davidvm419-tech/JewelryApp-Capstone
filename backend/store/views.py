@@ -53,7 +53,7 @@ def product_details(request, product_id):
 
 # Images for product section
 def images(request, product_id):
-    images = ProductImage.objects.filter(pk=product_id)
+    images = ProductImage.objects.filter(product_id=product_id)
     # Request to send the absolute route of the image to the front end
     return JsonResponse({"images":[image.serialize(request) for image in images]}, safe=False, status=200)
 
@@ -122,15 +122,14 @@ def edit_rating(request, product_id):
         return JsonResponse({"error": "rating is not a valid number between 1 and 5"}, status=400)
     
     # Ensure user updating is the same
-    rate_product = get_object_or_404(Rating, user=request.user, product=product_id)
-    if rate_product.user != request.user:
-        return JsonResponse({"error": "Not authorized to update this post"}, status=403)
+    rated_product = get_object_or_404(Rating, user=request.user, product__id=product_id)
+    if rated_product.user != request.user:
+        return JsonResponse({"error": "Not authorized to update this rating"}, status=403)
 
     # Update data base
     try:
-        rate_product.rating = rating
-        rate_product.save()
-
+        rated_product.rating = rating
+        rated_product.save()
     except IntegrityError:
         return JsonResponse({"error": "You already rated this product"}, status=400) 
 
@@ -141,9 +140,98 @@ def edit_rating(request, product_id):
     return JsonResponse({
         "message": "Rating updated!",
         "new_avg": new_avg,
-        "new_rating": rate_product.serialize(),
+        "new_rating": rated_product.serialize(),
         }, status=200)
 
+# Add a comment
+@login_required
+def add_comment(request, product_id):
+    # Confirm method
+    if request.method != "POST":
+        return JsonResponse({"error": "Wrong method, POST expected"}, status=400)
+    
+    # Get JSON data
+    try:
+        data = json.loads(request.body)
+    except:
+        return JsonResponse({"error": "Error recieving data, JSON data invalid"}, status=400)
+    
+    # Check valid data
+    comment = data.get("comment").strip()
+    if comment == "":
+        return JsonResponse({"error": "can't add an empty comment"}, status=400) 
+    
+    # Add commment to database
+    try:
+        new_comment = Comment.objects.create(
+            user=request.user,
+            product=Product.objects.get(pk=product_id),
+            comment=comment,
+        )
+    except IntegrityError:
+        return JsonResponse({"error": "you already added a comment to this product"}, status=400)
+    
+    # Return response
+    return JsonResponse({
+        "message": "Thanks for your comments!",
+        "new_comment": new_comment.serialize(),    
+        }, status=200)
+
+
+# Edit a comment
+@login_required
+def edit_comment(request, product_id):
+    # Confirm method
+    if request.method != "PUT":
+        return JsonResponse({"error": "Wrong method, PUT expected"}, status=400)
+    
+    # Get JSON data
+    try:
+        data = json.loads(request.body)
+    except:
+        return JsonResponse({"error": "Error recieving data, JSON data invalid"}, status=400)
+    
+    # Confirm update is valid
+    comment = data.get("comment").strip()
+    if comment == "":
+        return JsonResponse({"error": "can't update a comment with no content"}, status=400)
+    
+    # Confirm user owns the comment
+    edited_comment = get_object_or_404(Comment, user=request.user, product_id=product_id)
+    if edited_comment.user != request.user:
+        return JsonResponse({"error": "Not authorized to update this comment"}, status=403)
+    
+    # Update comment
+    try:
+        edited_comment.comment = comment
+        edited_comment.save()
+    except IntegrityError:
+        return JsonResponse({"error": "You already commented this product"}, status=400) 
+
+    # Return response
+    return JsonResponse({
+        "message": "Comment updated!",
+        "new_comment": edited_comment.serialize(),
+        }, status=200)
+
+
+# Delete a comment
+@login_required
+def delete_comment(request, comment_id):
+    # Confirm method
+    if request.method != "DELETE":
+        return JsonResponse({"error": "Wrong method, DELETE expected"}, status=400)
+    
+    # Confirm user owns the comment
+    comment_to_delete = get_object_or_404(Comment, pk=comment_id, user=request.user)
+    if(comment_to_delete.user != request.user):
+        return JsonResponse({"error": "Not authorized to delete this comment"}, status=403)
+
+    # Delete comment
+    comment_to_delete.delete()
+
+    # Return response
+    return JsonResponse({"message": "Comment deleted!",}, status=200)
 
 
 # User login 

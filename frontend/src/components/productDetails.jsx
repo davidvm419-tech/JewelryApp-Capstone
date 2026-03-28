@@ -64,22 +64,58 @@ function ProductDetails({ isAuthenticated, username, userId, logoutSuccess }) {
     }    
 
     return (
-        <div className="min-h-screen bg-slate-50">
-        {/* navbar*/}
+        <div className="min-h-screen bg-slate-50 flex flex-col">
+            {/* navbar*/}
             <Navbar isAuthenticated={isAuthenticated} username={username} logoutSuccess={logoutSuccess} />
-            <div  className="product card">
-                <ProductImages images={images} />
-                <h2>{product.name}</h2>
-                <p>Description: {product.description}</p>
-                <p>Category: {product.category}</p>
-                <p>Materials: {product.materials}</p>
-                <p>Price: ${product.price}</p>
-                <ProductRatings ratings={ratings} avg_rating={product.rating_avg} productId={productId} userId={userId} />
-                <ProductComments comments={comments} userId={userId} />
-            </div>
+            <main className="flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
+                <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden mb-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                        <div className="bg-slate-50/50 p-6 flex items-center justify-center border-b lg:border-b-0 lg:border-r border-slate-100">
+                            <ProductImages images={images} />
+                        </div>
+                         <div className="p-8 md:p-12 flex flex-col justify-center">
+                             <span className="text-indigo-600 font-bold uppercase tracking-widest text-xs mb-2">
+                                {product.category}
+                            </span>
+                            <h1 className="text-3xl md:text-4xl font-extrabold text-[#1B3A57] mb-4">
+                                {product.name}
+                            </h1>
+                            <div className="space-y-6">
+                                <p className="text-slate-600 leading-relaxed text-lg italic">
+                                    "{product.description}"
+                                </p>
+                                 <div className="pt-6 border-t border-slate-100 space-y-3">
+                                    <p className="text-slate-500 text-sm">
+                                        <span className="font-bold text-slate-700">Materials:</span> {product.materials}
+                                    </p>
+                                    <p className="text-3xl font-black text-slate-900">
+                                        ${product.price}
+                                    </p>
+                                </div>
+                                <div className="flex gap-4">
+                                    <button className="w-full md:w-max px-8 py-4 bg-[#1B3A57] text-white font-bold rounded-xl hover:bg-[#102A40] transition-all shadow-lg hover:shadow-indigo-200">
+                                        Add to Cart Placeholder!
+                                    </button>
+                                    <button className="w-full md:w-max px-8 py-4 bg-[#1B3A57] text-white font-bold rounded-xl hover:bg-[#102A40] transition-all shadow-lg hover:shadow-indigo-200">
+                                        Add to Wishlist Placeholder!
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                     <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full">
+                        <ProductRatings ratings={ratings} avg_rating={product.rating_avg} productId={productId} userId={userId} />
+                    </div>
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full">                
+                        <ProductComments comments={comments} productId={productId} userId={userId} />
+                    </div>
+                </div>
+            </main>
             <Footer />
         </div>
-    )
+    );
 }
 
 export default ProductDetails;
