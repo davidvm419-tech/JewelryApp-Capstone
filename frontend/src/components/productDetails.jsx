@@ -3,18 +3,18 @@ import Navbar from './navbar';
 import ProductImages from './productImages';
 import ProductRatings from './productRatings';
 import ProductComments from './ProductComments';
+import ProductButtons from './productButtons';
 import Footer from './footer';
 
 // Utility component
 import Loading from './loading';
 
-import { useParams } from "react-router-dom"
-
 // Hooks
 import { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
 
 
-function ProductDetails({ isAuthenticated, username, userId, logoutSuccess }) {
+function ProductDetails({ isAuthenticated, userId, username,  wishlist, shoppingCart, orders, logoutSuccess }) {
     // Set state ofr loading to better user experience
     const [isLoading, setIsLoading] = useState(true);
     // Get id from the url
@@ -66,7 +66,9 @@ function ProductDetails({ isAuthenticated, username, userId, logoutSuccess }) {
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col">
             {/* navbar*/}
-            <Navbar isAuthenticated={isAuthenticated} username={username} logoutSuccess={logoutSuccess} />
+            <Navbar isAuthenticated={isAuthenticated} userId={userId} username={username} 
+                wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
+                logoutSuccess={logoutSuccess} />
             <main className="flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
                 <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden mb-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
@@ -93,12 +95,7 @@ function ProductDetails({ isAuthenticated, username, userId, logoutSuccess }) {
                                     </p>
                                 </div>
                                 <div className="flex gap-4">
-                                    <button className="w-full md:w-max px-8 py-4 bg-[#1B3A57] text-white font-bold rounded-xl hover:bg-[#102A40] transition-all shadow-lg hover:shadow-indigo-200">
-                                        Add to Cart Placeholder!
-                                    </button>
-                                    <button className="w-full md:w-max px-8 py-4 bg-[#1B3A57] text-white font-bold rounded-xl hover:bg-[#102A40] transition-all shadow-lg hover:shadow-indigo-200">
-                                        Add to Wishlist Placeholder!
-                                    </button>
+                                    <ProductButtons productId={productId} wishlist={wishlist} shoppingCart={shoppingCart}/>
                                 </div>
                             </div>
                         </div>

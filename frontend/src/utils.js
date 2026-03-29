@@ -20,7 +20,7 @@ return cookieValue;
 
 
 
-// Utility function to get user status to the frontend
+// Utility function to get user status and data to the frontend
 export async function fetchSession() {
     try {
         const response = await fetch(`/api/get_session/`, { 
@@ -33,8 +33,22 @@ export async function fetchSession() {
 }
 
 // Utility function to get product data to the frontend
-export async function fetchCatalog(page=1) {
+export async function fetchCatalog(page=1, categoryId) {
+    // send fetch with category
+    if (categoryId) {
+        try {
+            const response =await fetch(`/api/catalog/${categoryId}?page=${page}`, {
+                credentials: "include",
+            });
+            return await response.json();
+        } catch (err) {
+            return `Error: ${err}`;
+        }
+    } 
+
+    // Send fetch without category
     try {
+
         const response = await fetch(`/api/catalog?page=${page}`, {
             credentials: "include",
         });

@@ -25,22 +25,42 @@ import { useEffect, useState } from 'react';
 function App() {
   // Set state for user
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState("");
   const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState(null);
+  const [wishlist, setWishlist] = useState([]);
+  const [shoppingCart, setShoppingCart] = useState([]);
+  const [orders, setOrders] = useState([]) 
+
   // Set state ofr loading to better user experience
   const [isLoading, setIsLoading] = useState(true);
+
 
   // Check authentication
   const autCheck = () => {
     fetchSession().then(data => {
       setIsAuthenticated(data.is_authenticated)
-      setUsername(data.username)
-      setUserId(data.user_id)
-      setIsLoading(false)
+      
+      // Check the status directly from the data server to avoid bugs
+      if (data.is_authenticated ) {
+        setUserId(data.user_id)
+        setUsername(data.username)
+        setWishlist(data.wishlist)
+        setShoppingCart(data.shopping_cart)
+        setOrders(data.orders) 
+        setIsLoading(false)        
+      } else {
+        // Clear data if is not authenticated
+          setUserId(null)
+          setUsername(null)
+          setWishlist([])
+          setShoppingCart([])
+          setOrders([])
+          setIsLoading(false)
+      }
     })
   };
 
-  // Call useeffect to render according to status
+  // Call useEffect to render according to status
   useEffect(() => {
     autCheck()  
   }, []) 
@@ -54,13 +74,23 @@ function App() {
       <Routes>
         {/* Check if user is login or not to send to the right view */}
         <Route path="/" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <LandingPage />} />
-        <Route path="/catalog" element={<Catalog isAuthenticated={isAuthenticated} username={username} logoutSuccess={autCheck} />}/>
-        <Route path="/product/:id" element={<ProductDetails isAuthenticated={isAuthenticated} username={username} userId={userId} logoutSuccess={autCheck} />} />
+        <Route path="/catalog" element={<Catalog 
+          isAuthenticated={isAuthenticated} userId={userId} username={username} 
+          wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
+          logoutSuccess={autCheck} />}/>
+        <Route path="/catalog/:id" element={<Catalog 
+          isAuthenticated={isAuthenticated} userId={userId} username={username} 
+          wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
+          logoutSuccess={autCheck} />}/>
+        <Route path="/product/:id" element={<ProductDetails 
+          isAuthenticated={isAuthenticated} userId={userId} username={username} 
+          wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
+          logoutSuccess={autCheck} />} />
         {/* Avoid users to login or register if they are login */}
         <Route path="/login" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Login loginSuccess={autCheck}/>} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Register registerSuccess={autCheck}/>} />
         {/* If path doesn't exists send the user to the default view */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {<Route path="*" element={<Navigate to="/" replace />} />}
       </Routes>
     </div>
   );

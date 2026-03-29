@@ -1,7 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from django.core.paginator import Paginator
 from django.core.validators import validate_email
 from django.db import IntegrityError
 from django.db.models import Avg
@@ -19,34 +18,75 @@ from .helpers import paginate
 
 # Create your views here.
 
-# Generate token and send user information if is authenticated for landing page and dashboard
+# Generate token and send user information if is authenticated for user information
 def get_session(request):
-    return JsonResponse({
-        "token": get_token(request),
-        "is_authenticated": request.user.is_authenticated,
-        "username": request.user.username if request.user.is_authenticated else None,   
-        "user_id": request.user.id if request.user.is_authenticated else False, 
+    is_authenticated = request.user.is_authenticated
+
+    # Get user data if is authenticated
+    if is_authenticated:     
+        user_id = request.user.id
+        wishlist = Wishlist.objects.filter(user_id=user_id).all()
+        shopping_cart = CartItem.objects.filter(user_id=user_id).all()
+        orders = Order.objects.filter(user_id=user_id).all()
+        
+        # Return response
+        return JsonResponse({
+            "token": get_token(request),
+            "is_authenticated": is_authenticated,
+            "user_id": user_id,
+            "username": request.user.username,
+            "wishlist": [item.serialize() for item in wishlist],
+            "shopping_cart": [item.serialize() for item in shopping_cart],
+            "orders": [order.serialize() for order in orders],
         })
+    else:
+        # if not return default values
+        return JsonResponse({
+            "token": get_token(request),
+            "is_authenticated": False,
+            })
 
 
 # Products for complete catalog
-def catalog(request):
+def catalog(request, category_id=None):
 
-    products_catalog = Product.objects.all().order_by("-created_at")
+    # Send entire catalog if there is not category
+    if not category_id:
+        products_catalog = Product.objects.all()
 
-    items_per_page = 9
+        items_per_page = 9
 
-    # function to create pagination sending the objects to paginate and the page
-    page_obj, pagination = paginate(products_catalog, request.GET.get("page"), items_per_page)    
+        # Send data to create pagination
+        page_obj, pagination = paginate(products_catalog, request.GET.get("page"), items_per_page)    
+
+        # Return JSON response
+        return JsonResponse({
+            "products": [product.serialize(request) for product in page_obj.object_list],
+            "pagination": pagination, 
+            }, status=200)
+    
+    # Send product by category instead
+    category_products = Product.objects.filter(category_id=category_id)
+
+    items_per_page = 6    
+
+    # Send data to create pagination
+    page_obj, pagination = paginate(category_products, request.GET.get("page"), items_per_page) 
 
     # Return JSON response
     return JsonResponse({
-        "products": [product.serialize(request) for product in page_obj.object_list],
-        "pagination": pagination, 
-        }, status=200)
+            "products": [product.serialize(request) for product in page_obj.object_list],
+            "pagination": pagination, 
+            }, status=200)
 
 
-# Function to get product details
+# Get store categories
+def store_categories(request):
+    categories = Category.objects.all()
+    return JsonResponse({"categories":[category.serialize() for category in categories]} )
+
+
+# Get product details
 def product_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     return JsonResponse(product.serialize(request), status=200)

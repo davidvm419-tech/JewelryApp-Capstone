@@ -20,7 +20,7 @@ JewelryApp-Capstone — Functional Specifications
   - Average rating
 - Accessible to all users (no login required).
 
-3. Individual Product View (Public) (oK)
+3. Individual Product View (Public) (Ok)
 -----------------------------------
 - Any user can open a product and see:
   - Name
@@ -37,15 +37,14 @@ JewelryApp-Capstone — Functional Specifications
   - Edit or delete own comments
   - Add product to wishlist
 
-4. Categories View (Login Required)
+4. Categories View (Ok)
 -----------------------------------
-- Authenticated users can:
-  - View available categories
-  - Filter products by category
-  - Sort products by:
-    - Price
-    - Rating
-    - Date added
+- View available categories
+- Filter products by category
+- Sort products by:
+  - Price
+  - Rating
+  - Date added
 
 5. Wishlist (Login Required)
 ----------------------------

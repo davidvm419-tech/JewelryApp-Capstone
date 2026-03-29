@@ -1,6 +1,7 @@
 // Hooks
 import { useEffect, useState } from "react";
 import { Menu, MenuButton, MenuItem,MenuItems} from "@headlessui/react";
+import { Link } from 'react-router-dom';
 
 function Categories() {
     // set States
@@ -8,17 +9,23 @@ function Categories() {
 
     // Set effect for categories fetching
     useEffect(()=> {
-        // FINISH HHIS FUNCTION
-        async function fethcCategories() {
+        // Get cstore categories
+        async function fetchCategories() {
             try {
                 const response = await fetch(`/api/categories`, {
                     credentials: "include",
                 });
 
-            } catch {
+                const data = await response.json();
+                setCategories(data.categories)
+                
 
+            } catch (err) {
+                console.log(`Error: ${err}`)
             }
         }
+
+        fetchCategories()
 
     }, [])
 
@@ -36,13 +43,19 @@ function Categories() {
                 origin-top-right rounded-md bg-[#E0F2FE] py-1 outline -outline-offset-1 outline-white/10 
                 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 
                 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
-                {categories.map((c, index)=> (
-                    <MenuItem key={index} className="block px-4 py-2 text-sm 
-                    text-black data-focus:bg-white/5 data-focus:outline-hidden
-                    px-4 py-2 hover:bg-[#E0F2FE] hover:scale-105 transition-all cursor-pointer rounded-md">
-                        <h1>{c.c}</h1>
-                    </MenuItem>
-                    ))
+                {categories.length === 0 ? (
+                    <MenuItem className="block px-4 py-2 text-sm">Not categories avaliable at the moment</MenuItem>
+                    ) : (
+                        categories.map(category => (
+                        <MenuItem key={category.id} className="block px-4 py-2 text-sm 
+                        text-black data-focus:bg-white/5 data-focus:outline-hidden
+                        hover:bg-[#E0F2FE] hover:scale-105 transition-all cursor-pointer rounded-md">
+                            <Link to={`/catalog/${category.id}`}>
+                                <p>{category.category_slug}</p>
+                            </Link>
+                        </MenuItem>
+                        ))
+                    )
                 }
             </MenuItems>
         </Menu>

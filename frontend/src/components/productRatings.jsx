@@ -181,7 +181,7 @@ function ProductRatings({ratings, avg_rating, productId, userId}) {
                     </div>
                 ) : (
                     <div className="p-4 bg-slate-50 rounded-lg border border-dashed border-slate-300 text-center">
-                        <p className="text-slate-500 text-sm font-medium">Please log in to rate the product</p>
+                        <p className="text-slate-500 text-sm font-medium">Please log in to rate the product.</p>
                     </div>
                 )}
             </div>

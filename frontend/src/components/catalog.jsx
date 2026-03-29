@@ -8,39 +8,46 @@ import Loading from '../components/loading';
 
 // Hooks
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 // Utils functions
 import { fetchCatalog } from '../utils';
 
-export default function Catalog({ isAuthenticated, username, logoutSuccess }) {
+export default function Catalog({ isAuthenticated, userId, username,  wishlist, shoppingCart, orders, logoutSuccess }) {
   // Set state ofr loading to better user experience
   const [isLoading, setIsLoading] = useState(true);
   // Set states for products
   const [products, setProducts] = useState([]);
   const [pages, setPages] = useState({});
   const [page, setPage] = useState(1);  
+
+    // Get id from the url
+    let categoryId = useParams();
+    categoryId = categoryId.id
+
   // Get backend information
   useEffect(() => {
-    fetchCatalog(page)
+    fetchCatalog(page, categoryId)
     .then(data => {
       setProducts(data.products)
       setPages(data.pagination)
       setIsLoading(false)
     })
-  }, [page])
+  }, [page, categoryId])
 
   if (isLoading) {
       return  <Loading />
   }    
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 flex flex-col">
       {/* navbar*/}
-      <Navbar isAuthenticated={isAuthenticated} username={username} logoutSuccess={logoutSuccess} />
+      <Navbar isAuthenticated={isAuthenticated} userId={userId} username={username} 
+        wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
+        logoutSuccess={logoutSuccess} />
       
       {/* Catalog content*/}
-      <main className="max-w-7xl mx-auto py-12 px-4">
+      <main className="max-w-7xl mx-auto py-12 px-4 flex-grow">
         <section className="w-fit mx-auto grid grid-cols-1 
         lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
           {products.map(product => (

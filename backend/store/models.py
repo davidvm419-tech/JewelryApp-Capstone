@@ -20,8 +20,15 @@ class Category(models.Model):
     class Meta:
         ordering =["name"]
 
+    # Nice view for admin panel
     def __str__(self):
         return self.name
+    
+    def serialize(self):
+        return { "id": self.id,
+                "category_name": self.name,
+                "category_slug": self.slug,
+                }
 
 
 class Product(models.Model):
@@ -36,6 +43,10 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    # Order products by newest
+    class Meta:
+        ordering = ["-created_at"]
     
     # Add main image to the product catalog
     def main_image(self, request):
@@ -145,9 +156,19 @@ class Wishlist(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="wishlist")
     added_at = models.DateTimeField(auto_now_add=True)
 
-    # Avoid duplicate products on wishlist from the model itself
+    # Avoid duplicate products on wishlist from the model itself and order by newest
     class Meta:
         unique_together = ("user", "product")
+        ordering = ["-added_at"]
+    
+    def serialize(self):
+        local_time = timezone.localtime(self.added_at)
+        return {
+            "id": self.id,
+            "user_id": self.user.id,
+            "product_id": self.product.id,
+            "added_at": local_time.strftime("Added at: %d-%m-%Y"),
+        }
 
 
 class CartItem(models.Model):
@@ -158,15 +179,40 @@ class CartItem(models.Model):
         validators=[MinValueValidator(1)])
     added_at = models.DateTimeField(auto_now_add=True)
     
-    # Avoid duplicate products on cart from the model itself
+    # Avoid duplicate products on cart from the model itself and order by newest
     class Meta:
         unique_together = ("user", "product")
+        ordering = ["-added_at"]
+
+    def serialize(self):
+        local_time = timezone.localtime(self.added_at)
+        return {
+            "id": self.id,
+            "user_id": self.user.id,
+            "product_id": self.product.id,
+            "quantity": self.quantity,
+            "price": self.product.price,
+            "added_at": local_time.strftime("Added at: %d-%m-%Y"),
+        }
     
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    # Order by newest
+    class Meta:
+        ordering = ["-created_at"]
+
+    def serialize(self):
+        local_time = timezone.localtime(self.created_at)
+        return {
+                "id": self.id,
+                "user_id": self.user.id,
+                "total_price": self.total_price,
+                "created_at": local_time.strftime("Purchase at: %d-%m-%Y"),
+            }
 
 
 class OrderItem(models.Model):
@@ -175,4 +221,20 @@ class OrderItem(models.Model):
     # Avoid adding 0 items to an order from the model itself
     quantity = models.IntegerField(
         validators=[MinValueValidator(1)])
+    price_at_purchase = models.DecimalField(max_digits=10, decimal_places=2)
     added_at = models.DateTimeField(auto_now_add=True)
+
+    # Order by newest
+    class Meta:
+        ordering = ["-added_at"]
+
+    def serialize(self):
+        local_time = timezone.localtime(self.added_at)
+        return {
+            "id": self.id,
+            "order_id": self.order.id,
+            "product_id": self.product.id,
+            "quantity": self.quantity,
+            "price_at_purchase": self.price_at_purchase,
+            "added_at": local_time.strftime("Added at: %d-%m-%Y"),  
+        }
