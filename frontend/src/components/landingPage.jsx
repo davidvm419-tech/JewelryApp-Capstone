@@ -10,6 +10,7 @@ import Loading from '../components/loading';
 function LandingPage() {
     // Set state ofr loading to better user experience
     const [isLoading, setIsLoading] = useState(true);
+      const [error, setError] = useState();
     // Navigation
     const navigation = useNavigate();
     // Set states
@@ -17,18 +18,34 @@ function LandingPage() {
 
     // Call the fetch function
     useEffect(() => {
-        fetchCatalog()
-        .then(data => {
-            // Pick 6 random images from the first page of the catalog
-            const randomProducts = data.products.sort(() => Math.random() - 0.5).slice(0, 6)
-            setProducts(randomProducts)
+        const loadData = async () => {
+            const {data, ok} = await fetchCatalog();
+            // In case somethhing worng hhappens display the user a message
+            if (!ok) {
+                setError(true)
+            } else {
+                // Pick 6 random images from the first page of the catalog
+                const randomProducts = data.products.sort(() => Math.random() - 0.5).slice(0, 6)
+                setProducts(randomProducts)
+            }
             setIsLoading(false)
-        })
+            }
+        loadData()
     },[])
 
     if (isLoading) {
         return  <Loading />
     }    
+    
+    // Load error in case something really bad happens
+    if (error) {
+    return (
+      <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+        <p className="font-bold">Be Warned</p>
+        <p>Our store is currently unavailable, we'll be back soon!</p>
+    </div>
+    );
+  }
 
     return (
         <div className="min-h-screen bg-[#F4F7FA] text-[#1B3A57] flex items-center justify-center">

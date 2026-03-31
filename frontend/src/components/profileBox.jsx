@@ -14,7 +14,7 @@ function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart
     // User menu items
     const userMenu = [
         {name: `Shopping Cart (${shoppingCart?.length || 0})`, href: `Temporal placeholder`},
-        {name: `Wishlist (${shoppingCart?.length || 0})`, href: `Temporal placeholder`},
+        {name: `Wishlist (${wishlist?.length || 0})`, href: `Temporal placeholder`},
         {name: `Settings`, href: `Temporal placeholder`},
     ]
     
@@ -55,7 +55,7 @@ function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart
                     </MenuButton>
 
                     <MenuItems transition
-                    className="absolute right-0 z-10 mt-2 w-48 
+                    className="absolute right-0 z-50 mt-2 w-48 
                     origin-top-right rounded-md bg-[#E0F2FE] py-1 outline -outline-offset-1 outline-white/10 
                     transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 
                     data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">

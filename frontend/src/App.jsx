@@ -77,15 +77,15 @@ function App() {
         <Route path="/catalog" element={<Catalog 
           isAuthenticated={isAuthenticated} userId={userId} username={username} 
           wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
-          logoutSuccess={autCheck} />}/>
+          wishListChange={autCheck} logoutSuccess={autCheck} />}/>
         <Route path="/catalog/:id" element={<Catalog 
           isAuthenticated={isAuthenticated} userId={userId} username={username} 
           wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
-          logoutSuccess={autCheck} />}/>
+          wishListChange={autCheck} logoutSuccess={autCheck} />}/>
         <Route path="/product/:id" element={<ProductDetails 
           isAuthenticated={isAuthenticated} userId={userId} username={username} 
           wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
-          logoutSuccess={autCheck} />} />
+          onCartChange={autCheck} logoutSuccess={autCheck} />} />
         {/* Avoid users to login or register if they are login */}
         <Route path="/login" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Login loginSuccess={autCheck}/>} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Register registerSuccess={autCheck}/>} />

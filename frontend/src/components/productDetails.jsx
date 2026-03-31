@@ -14,7 +14,8 @@ import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 
 
-function ProductDetails({ isAuthenticated, userId, username,  wishlist, shoppingCart, orders, logoutSuccess }) {
+function ProductDetails({ isAuthenticated, userId, username,  
+                        wishlist, shoppingCart, orders, onCartChange, logoutSuccess }) {
     // Set state ofr loading to better user experience
     const [isLoading, setIsLoading] = useState(true);
     // Get id from the url
@@ -94,8 +95,8 @@ function ProductDetails({ isAuthenticated, userId, username,  wishlist, shopping
                                         ${product.price}
                                     </p>
                                 </div>
-                                <div className="flex gap-4">
-                                    <ProductButtons productId={productId} wishlist={wishlist} shoppingCart={shoppingCart}/>
+                                <div className="flex flex-col md:flex-row gap-4 w-full">
+                                    <ProductButtons isAuthenticated={isAuthenticated} productId={productId} shoppingCart={shoppingCart} onCartChange={onCartChange}/>
                                 </div>
                             </div>
                         </div>

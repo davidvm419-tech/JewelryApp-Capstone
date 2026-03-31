@@ -40,9 +40,11 @@ export async function fetchCatalog(page=1, categoryId) {
             const response =await fetch(`/api/catalog/${categoryId}?page=${page}`, {
                 credentials: "include",
             });
-            return await response.json();
+            const data = await response.json();
+            // Return data and status true or false of response
+            return {data, ok: response.ok};
         } catch (err) {
-            return `Error: ${err}`;
+            console.log(`Error: ${err}`)
         }
     } 
 
@@ -52,8 +54,87 @@ export async function fetchCatalog(page=1, categoryId) {
         const response = await fetch(`/api/catalog?page=${page}`, {
             credentials: "include",
         });
-        return await response.json();
+        const data = await response.json();
+        // Return data and status true or false of response
+        return {data, ok: response.ok};
+
     } catch (err) {
-        return `Error: ${err}`;
+        console.log(`Error: ${err}`)
+    }
+}
+
+// Utility functions to add and delete wishlists items
+export async function addToWishList(productId) {
+    try {
+        const response = await fetch(`/api/wishlist/add/${productId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            credentials: "include",
+        });
+        const data = await response.json();
+        // Return data and status true or false for response
+        return {data, ok: response.ok};
+
+    } catch (err) { 
+        console.log(`Error: ${err}`)
+    }
+}
+
+export async function deleteFromWishList(wishlistItemId) {
+    try {
+        const response = await fetch(`/api/wishlist/delete/${wishlistItemId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            credentials: "include",
+        });
+        const data = await response.json();
+        // Return data and status true or false for response
+        return {data, ok: response.ok};
+    } catch (err) { 
+        console.log(`Error: ${err}`)
+    }
+}
+
+
+// Utility functions to add and delete cart items
+export async function addToCart(productId) {
+    try {
+        const response = await fetch(`/api/cart/add/${productId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            credentials: "include",
+        });
+        const data = await response.json();
+        // Return data and status true or false for response
+        return {data, ok: response.ok};
+    } catch (err) {
+        console.log(`Error: ${err}`)
+    }
+}
+
+export async function deleteFromCart(cartItemId) {
+    try {
+        const response = await fetch(`/api/cart/delete/${cartItemId}`, {
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+            credentials: "include",
+        })
+        const data = await response.json();
+        // Return data and status true or false for response
+        return {data, ok: response.ok};
+    } catch (err) {
+        console.log(`Error: ${err}`)
     }
 }

@@ -14,15 +14,19 @@ urlpatterns = [
     path("api/images/<int:product_id>", views.images, name="images"),
     path("api/categories", views.store_categories, name="store_categories"),
 
-    # Create, edit and delete paths
+    # Create, edit and delete comments and ratings
     path("api/rating/<int:product_id>", views.add_rating, name="add_rating"),
     path("api/rating/edit/<int:product_id>", views.edit_rating, name="edit_rating"),
     path("api/comment/<int:product_id>", views.add_comment, name="add_comment"),
     path("api/comment/edit/<int:product_id>", views.edit_comment, name="edit_comment"),
     path("api/comment/delete/<int:comment_id>", views.delete_comment, name="delete_comment"),
 
-    # User data paths
-    
+    # Create and delete products from wishlist and shopping cart
+    path("api/wishlist/add/<int:product_id>", views.add_to_wishlist, name="add_to_wishlist"),
+    path("api/wishlist/delete/<int:wishlist_item_id>",views.delete_from_wishlist, name="delete_from_wishlist"),
+    path("api/cart/add/<int:product_id>", views.add_to_cart, name="add_to_cart"),
+    path("api/cart/delete/<int:cart_item_id>", views.delete_from_cart, name="delete_from_cart"),
+
     # User paths (remember the ending / so react and Django communicate)
     path("api/register/", (views.register_view), name="register"),
     path("api/login/", views.login_view, name="login"),

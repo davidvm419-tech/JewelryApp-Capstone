@@ -274,6 +274,96 @@ def delete_comment(request, comment_id):
     return JsonResponse({"message": "Comment deleted!",}, status=200)
 
 
+# Add product to wiishlist
+@login_required
+def add_to_wishlist(request, product_id):
+    # Confirm method
+    if request.method != "POST":
+        return JsonResponse({"error": "Wrong method, POST expected"}, status=400)
+    
+    # Delete product from cart if exists
+    item_to_delete = CartItem.objects.filter(user=request.user, product_id=product_id).delete()
+    
+    # Add product to wishlist
+    try:
+        new_product_to_list = Wishlist.objects.create(
+            user=request.user,
+            product=Product.objects.get(pk=product_id),
+        )
+    except IntegrityError:
+        return JsonResponse({"error": "you already added this product to your wishlist"}, status=400)
+    
+    # return response
+    return JsonResponse({
+        "message": "Product added to your wishlist!",
+        "new_wishlist": new_product_to_list.serialize(),    
+        }, status=200)
+
+
+# Delete product from wishlist
+@login_required
+def delete_from_wishlist(request, wishlist_item_id):
+    # Confirm method
+    if request.method != "DELETE":
+        return JsonResponse({"error": "Wrong method, DELETE expected"}, status=400)
+    
+    # confirm user is owner of the wishlist
+    item_to_delete = get_object_or_404(Wishlist, pk=wishlist_item_id , user=request.user)
+    if item_to_delete.user != request.user:
+        return JsonResponse({"error": "Not authorized to delete this item"}, status=403)
+    
+    # Delete product from wishlist
+    item_to_delete.delete()
+
+    # return response
+    return JsonResponse({"message": "Product deleted from wishlist",}, status=200)
+
+# Add product to cart
+@login_required
+def add_to_cart(request, product_id):
+    # Confirm method
+    if request.method != "POST":
+        return JsonResponse({"error": "Wrong method, POST expected"}, status=400)
+    
+    # Delete product from wishlist if exists
+    item_to_delete = Wishlist.objects.filter(user=request.user, product_id=product_id).delete()
+
+    # Add product to cart
+    try:
+        new_cart = CartItem.objects.create(
+            user=request.user,
+            product=Product.objects.get(pk=product_id),
+            quantity=1,
+        )
+    except IntegrityError:
+        return JsonResponse({"error": "you already added this product to your shopping cart"}, status=400)
+    
+    # Return response
+    return JsonResponse({
+        "message": "Product added to your shopping cart!",
+        "new_cart": new_cart.serialize(),
+    }, status=200)
+
+
+# Delete from cart
+@login_required
+def delete_from_cart(request, cart_item_id):
+    # Confirm method
+    if request.method != "DELETE":
+        return JsonResponse({"error": "Wrong method, DELETE expected"}, status=400)
+    
+    # Confirm user is the owner of the cart
+    item_to_delete = get_object_or_404(CartItem, pk=cart_item_id, user=request.user)
+    if item_to_delete.user != request.user:
+        return JsonResponse({"error": "Not authorized to delete this item"}, status=403)
+    
+    # Delete product from cart
+    item_to_delete.delete()
+
+    # Return response
+    return JsonResponse({"message": "Product deleted from shopping cart",}, status=200)
+
+
 # User login 
 def login_view(request):
     # Confirm method

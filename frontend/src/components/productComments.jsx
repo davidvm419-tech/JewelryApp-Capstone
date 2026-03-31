@@ -198,7 +198,7 @@ function ProductComments({ comments, productId, userId }) {
                             placeholder="Add a comment..." />
                             <button className="px-6 py-2 bg-[#2F6FA3] text-white font-bold rounded-lg hover:bg-[#102A40] 
                             disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm" 
-                            disabled={!commentInput.trim()}onClick={handleAddComment}>Post Comment</button>
+                            disabled={!commentInput.trim()} onClick={handleAddComment}>Post Comment</button>
                         </div>
                     )
                 ) : (
