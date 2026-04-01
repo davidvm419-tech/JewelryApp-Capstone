@@ -161,12 +161,15 @@ class Wishlist(models.Model):
         unique_together = ("user", "product")
         ordering = ["-added_at"]
     
-    def serialize(self):
+    def serialize(self, request):
         local_time = timezone.localtime(self.added_at)
         return {
             "id": self.id,
             "user_id": self.user.id,
             "product_id": self.product.id,
+            "product_name": self.product.name,
+            "product_image": self.product.main_image(request),
+            "price": self.product.price,
             "added_at": local_time.strftime("Added at: %d-%m-%Y"),
         }
 
@@ -184,12 +187,14 @@ class CartItem(models.Model):
         unique_together = ("user", "product")
         ordering = ["-added_at"]
 
-    def serialize(self):
+    def serialize(self, request):
         local_time = timezone.localtime(self.added_at)
         return {
             "id": self.id,
             "user_id": self.user.id,
             "product_id": self.product.id,
+            "product_name": self.product.name,
+            "product_image": self.product.main_image(request),
             "quantity": self.quantity,
             "price": self.product.price,
             "added_at": local_time.strftime("Added at: %d-%m-%Y"),

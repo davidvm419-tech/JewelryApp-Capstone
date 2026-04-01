@@ -35,8 +35,8 @@ def get_session(request):
             "is_authenticated": is_authenticated,
             "user_id": user_id,
             "username": request.user.username,
-            "wishlist": [item.serialize() for item in wishlist],
-            "shopping_cart": [item.serialize() for item in shopping_cart],
+            "wishlist": [item.serialize(request) for item in wishlist],
+            "shopping_cart": [item.serialize(request) for item in shopping_cart],
             "orders": [order.serialize() for order in orders],
         })
     else:
@@ -296,7 +296,7 @@ def add_to_wishlist(request, product_id):
     # return response
     return JsonResponse({
         "message": "Product added to your wishlist!",
-        "new_wishlist": new_product_to_list.serialize(),    
+        "new_wishlist": new_product_to_list.serialize(request),    
         }, status=200)
 
 
@@ -341,7 +341,7 @@ def add_to_cart(request, product_id):
     # Return response
     return JsonResponse({
         "message": "Product added to your shopping cart!",
-        "new_cart": new_cart.serialize(),
+        "new_cart": new_cart.serialize(request),
     }, status=200)
 
 

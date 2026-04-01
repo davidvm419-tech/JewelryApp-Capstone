@@ -13,8 +13,8 @@ function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart
 
     // User menu items
     const userMenu = [
-        {name: `Shopping Cart (${shoppingCart?.length || 0})`, href: `Temporal placeholder`},
-        {name: `Wishlist (${wishlist?.length || 0})`, href: `Temporal placeholder`},
+        {name: `Shopping Cart (${shoppingCart?.length || 0})`, href: "/cart"},
+        {name: `Wishlist (${wishlist?.length || 0})`, href: "/wishlist"},
         {name: `Settings`, href: `Temporal placeholder`},
     ]
     
