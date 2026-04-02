@@ -1,5 +1,5 @@
 // Util function
-import {addToWishList, deleteFromWishList, fetchSession} from "../utils";
+import {addToWishList, deleteFromWishList, fetchSession} from "../../utils";
 
 // Hooks
 import { useState, useEffect } from "react";

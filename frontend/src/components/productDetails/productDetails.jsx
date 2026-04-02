@@ -1,13 +1,13 @@
 // Components
-import Navbar from './navbar';
+import Navbar from '../general/navbar';
 import ProductImages from './productImages';
 import ProductRatings from './productRatings';
 import ProductComments from './ProductComments';
 import ProductButtons from './productButtons';
-import Footer from './footer';
+import Footer from '../general/footer';
 
 // Utility component
-import Loading from './loading';
+import Loading from '../general/loading';
 
 // Hooks
 import { useState, useEffect } from "react"

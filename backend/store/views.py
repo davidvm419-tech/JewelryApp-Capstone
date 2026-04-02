@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db import IntegrityError
-from django.db.models import Avg
+from django.db.models import Avg, F, Sum
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
@@ -28,7 +28,9 @@ def get_session(request):
         wishlist = Wishlist.objects.filter(user_id=user_id).all()
         shopping_cart = CartItem.objects.filter(user_id=user_id).all()
         orders = Order.objects.filter(user_id=user_id).all()
-        
+        # Send the total cart value to the frontend Sum and F perform the calculations in the rows of the table
+        cart_value = CartItem.objects.filter(user=request.user).aggregate(
+            total=Sum(F("product__price") * F("quantity")))["total"] or 0
         # Return response
         return JsonResponse({
             "token": get_token(request),
@@ -37,6 +39,7 @@ def get_session(request):
             "username": request.user.username,
             "wishlist": [item.serialize(request) for item in wishlist],
             "shopping_cart": [item.serialize(request) for item in shopping_cart],
+            "cart_total_value": float(cart_value),
             "orders": [order.serialize() for order in orders],
         })
     else:
@@ -274,7 +277,7 @@ def delete_comment(request, comment_id):
     return JsonResponse({"message": "Comment deleted!",}, status=200)
 
 
-# Add product to wiishlist
+# Add product to wishlist
 @login_required
 def add_to_wishlist(request, product_id):
     # Confirm method
@@ -327,7 +330,7 @@ def add_to_cart(request, product_id):
     
     # Delete product from wishlist if exists
     item_to_delete = Wishlist.objects.filter(user=request.user, product_id=product_id).delete()
-
+        
     # Add product to cart
     try:
         new_cart = CartItem.objects.create(
@@ -343,6 +346,47 @@ def add_to_cart(request, product_id):
         "message": "Product added to your shopping cart!",
         "new_cart": new_cart.serialize(request),
     }, status=200)
+
+
+# Update cart quantity
+@login_required
+def update_cart(request, product_id, quantity_change):
+    # Confirm methdo
+    if request.method != "PUT":
+        return JsonResponse({"error": "Wrong method, PUT expected"}, status=400)
+    # Check if product is already in the cart
+    cart_product = CartItem.objects.get(user=request.user, product_id=product_id)
+        
+    # Add quantity
+    if CartItem.objects.filter(user=request.user, product_id=product_id).exists():
+        if quantity_change == "+":
+            
+            # Get the product current quantity
+            product_quantity = Product.objects.get(pk=product_id).quantity
+            
+            # Check that quantity doesn't exceed stock
+            if cart_product.quantity + 1 > product_quantity:
+                return JsonResponse({"alert_message": f"not enough stock for this product, current stock is: {product_quantity}"}, status=200)
+            
+            # Update quantity
+            cart_product.quantity += 1
+            cart_product.save()
+            return JsonResponse({
+                "message": "quantity updated"}, status=200)
+        
+        # Decrease quantity
+        if quantity_change == "-":
+            # Check that quantity doesn't reach 0
+            if cart_product.quantity - 1 == 0:
+                return JsonResponse({"alert_message": "Can't get a product with 0 items in your cart"}, status=200)
+            
+            # Update quantity
+            cart_product.quantity -= 1
+            cart_product.save()
+            return JsonResponse({
+                "message": "quantity updated"}, status=200) 
+    else:
+        return JsonResponse({"error": "This product isn't in your cart"}, status=400)
 
 
 # Delete from cart

@@ -25,6 +25,7 @@ urlpatterns = [
     path("api/wishlist/add/<int:product_id>", views.add_to_wishlist, name="add_to_wishlist"),
     path("api/wishlist/delete/<int:wishlist_item_id>",views.delete_from_wishlist, name="delete_from_wishlist"),
     path("api/cart/add/<int:product_id>", views.add_to_cart, name="add_to_cart"),
+    path("api/cart/update/<int:product_id>/<str:quantity_change>", views.update_cart, name="add_to_cart"),
     path("api/cart/delete/<int:cart_item_id>", views.delete_from_cart, name="delete_from_cart"),
 
     # User paths (remember the ending / so react and Django communicate)

@@ -10,8 +10,8 @@ import { useNavigate } from 'react-router-dom';
 
 
 // Components
-import Categories from './categories'
-import ProfileBox from './profileBox';
+import Categories from '../products/categories'
+import ProfileBox from '../user/profileBox';
 
 
 function classNames(...classes) {

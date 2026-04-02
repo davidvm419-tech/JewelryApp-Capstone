@@ -5,23 +5,26 @@ import React from 'react';
 import {fetchSession} from "./utils";
 
 // Utility component
-import Loading from './components/loading';
+import Loading from './components/general/loading';
 
 // Add the url path for user friendliness
 import {Routes, Route, Navigate} from "react-router-dom";
 
 // Catalog and product components
-import LandingPage from './components/landingPage';
-import Catalog from "./components/catalog";
-import ProductDetails from './components/productDetails';
+import LandingPage from './components/general/landingPage';
+import Catalog from "./components/products/catalog";
+import ProductDetails from './components/productDetails/productDetails';
 
 // User components
-import Wishlist from './components/wishlist';
-import ShoppingCart from './components/shoppingCart';
+import Wishlist from './components/user/wishlist';
+import ShoppingCart from './components/user/shoppingCart';
+import UserOrders from './components/user/userOrders';
+import OrderDetails from './components/user/orderDetails';
+import UserSettings from './components/user/userSettings';
 
 // Login components
-import Login from "./components/login";
-import Register from "./components/register";
+import Login from "./components/general/login";
+import Register from "./components/general/register";
 
 // Hooks
 import { useEffect, useState } from 'react';
@@ -33,6 +36,7 @@ function App() {
   const [username, setUsername] = useState(null);
   const [wishlist, setWishlist] = useState([]);
   const [shoppingCart, setShoppingCart] = useState([]);
+  const [cartTotalValue, setCartTotalValue] = useState(0);
   const [orders, setOrders] = useState([]) 
 
   // Set state ofr loading to better user experience
@@ -50,6 +54,7 @@ function App() {
         setUsername(data.username)
         setWishlist(data.wishlist)
         setShoppingCart(data.shopping_cart)
+        setCartTotalValue(data.cart_total_value)
         setOrders(data.orders) 
         setIsLoading(false)        
       } else {
@@ -58,6 +63,7 @@ function App() {
           setUsername(null)
           setWishlist([])
           setShoppingCart([])
+          setCartTotalValue(0)
           setOrders([])
           setIsLoading(false)
       }
@@ -94,9 +100,17 @@ function App() {
           wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
           onCartChange={autCheck} logoutSuccess={autCheck} />} />
         {/* Route to wishlist */}
-        <Route path="/wishlist" element={<Wishlist wishlist={wishlist} />}/>
+        <Route path="/wishlist" element={<Wishlist wishlist={wishlist} 
+          wishListChange={autCheck} onCartChange={autCheck} />}/>
         {/* Route to cart */}
-        <Route path="/cart" element={<ShoppingCart shoppingCart={shoppingCart} />}/>
+        <Route path="/cart" element={<ShoppingCart shoppingCart={shoppingCart} cartTotalValue={cartTotalValue}
+          onCartChange={autCheck} />}/>
+        {/* Route to orders */}
+        <Route path="/orders" element={<UserOrders orders={orders} />} />
+        {/* Route to order details */}
+        <Route path="/order/:id" element={<OrderDetails orders={orders} />} />
+        {/* Route to user settings */}
+        <Route path="/settings" element={<UserSettings username={username} logoutSuccess={autCheck} />} />
         {/* Avoid users to login or register if they are login */}
         <Route path="/login" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Login loginSuccess={autCheck}/>} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Register registerSuccess={autCheck}/>} />

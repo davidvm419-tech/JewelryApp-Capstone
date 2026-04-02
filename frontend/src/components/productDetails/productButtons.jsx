@@ -1,5 +1,5 @@
 // Util function
-import {addToCart, deleteFromCart } from "../utils";
+import {addToCart, deleteFromCart } from "../../utils";
 
 // Hooks
 import { useState, useEffect } from "react";

@@ -104,6 +104,7 @@ export async function deleteFromWishList(wishlistItemId) {
 
 // Utility functions to add and delete cart items
 export async function addToCart(productId) {
+
     try {
         const response = await fetch(`/api/cart/add/${productId}`, {
             method: "POST",

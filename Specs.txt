@@ -46,7 +46,7 @@ JewelryApp-Capstone — Functional Specifications
   - Rating
   - Date added
 
-5. Wishlist (Login Required)
+5. Wishlist (Login Required) (Ok)
 ----------------------------
 - Authenticated users can:
   - Add any product to their wishlist

@@ -1,19 +1,18 @@
 // Components
-import Navbar from './navbar';
-import wishlistHeart from './wishlistHeart';
-import Footer from './footer';
+import Navbar from '../general/navbar';
+import WishlistHeart from './wishlistHeart';
+import Footer from '../general/footer';
 import Pagination from './pagination';
 
 // Utility component
-import Loading from '../components/loading';
+import Loading from '../general/loading';
 
 // Hooks
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 // Utils functions
-import { fetchCatalog } from '../utils';
-import WishlistHeart from './wishlistHeart';
+import { fetchCatalog } from '../../utils';
 
 export default function Catalog({ isAuthenticated, userId, username,  
                                   wishlist, shoppingCart, orders, wishListChange, logoutSuccess }) {

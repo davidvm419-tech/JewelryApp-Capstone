@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 // Util function
-import { getCookie } from '../utils';
+import { getCookie } from '../../utils';
 
 
 function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart, orders, logoutSuccess }) {
@@ -15,7 +15,8 @@ function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart
     const userMenu = [
         {name: `Shopping Cart (${shoppingCart?.length || 0})`, href: "/cart"},
         {name: `Wishlist (${wishlist?.length || 0})`, href: "/wishlist"},
-        {name: `Settings`, href: `Temporal placeholder`},
+        {name: `Orders`, href: "/orders"},
+        {name: `Settings`, href: "/settings"},
     ]
     
 

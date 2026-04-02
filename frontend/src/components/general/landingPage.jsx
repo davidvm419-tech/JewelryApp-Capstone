@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { fetchCatalog } from '../utils';
+import { fetchCatalog } from '../../utils';
 import { useNavigate } from "react-router-dom"
 
 // Utility component
-import Loading from '../components/loading';
+import Loading from './loading';
 
 
 function LandingPage() {

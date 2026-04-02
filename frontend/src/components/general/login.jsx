@@ -1,5 +1,5 @@
 import React from 'react';
-import {getCookie} from "../utils";
+import {getCookie} from "../../utils";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
