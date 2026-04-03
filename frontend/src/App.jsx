@@ -19,7 +19,6 @@ import ProductDetails from './components/productDetails/productDetails';
 import Wishlist from './components/user/wishlist';
 import ShoppingCart from './components/user/shoppingCart';
 import UserOrders from './components/user/userOrders';
-import OrderDetails from './components/user/orderDetails';
 import UserSettings from './components/user/userSettings';
 
 // Login components
@@ -106,11 +105,15 @@ function App() {
         <Route path="/cart" element={<ShoppingCart shoppingCart={shoppingCart} cartTotalValue={cartTotalValue}
           onCartChange={autCheck} />}/>
         {/* Route to orders */}
-        <Route path="/orders" element={<UserOrders orders={orders} />} />
-        {/* Route to order details */}
-        <Route path="/order/:id" element={<OrderDetails orders={orders} />} />
+        <Route path="/orders" element={<UserOrders 
+          isAuthenticated={isAuthenticated} userId={userId} username={username} 
+          wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
+          logoutSuccess={autCheck}/>} />
         {/* Route to user settings */}
-        <Route path="/settings" element={<UserSettings username={username} logoutSuccess={autCheck} />} />
+        <Route path="/settings" element={<UserSettings 
+          isAuthenticated={isAuthenticated} userId={userId} username={username} 
+          wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
+          logoutSuccess={autCheck}/>} />
         {/* Avoid users to login or register if they are login */}
         <Route path="/login" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Login loginSuccess={autCheck}/>} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Register registerSuccess={autCheck}/>} />

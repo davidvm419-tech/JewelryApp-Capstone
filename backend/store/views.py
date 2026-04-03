@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.db.models import Avg, F, Sum
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
@@ -406,6 +406,59 @@ def delete_from_cart(request, cart_item_id):
 
     # Return response
     return JsonResponse({"message": "Product deleted from shopping cart",}, status=200)
+
+# Buy products
+@login_required
+# Freeze the data values to avoid changes in prices during the transaction
+@transaction.atomic
+def buy_view(request):
+    # Confirm method
+    if request.method != "POST":
+        return JsonResponse({"error": "Wrong method, POST expected"}, status=400)
+    
+    '''Get user cart, freeze items for updating and manage better performance when looping the cart to
+    to get the order items'''
+    user_cart = CartItem.objects.filter(user=request.user).select_for_update().select_related("product")
+
+    # Security check for empty cart
+    if not user_cart.exists():
+        return JsonResponse({"error": "An error has ocurred, please check your shopping cart"}, status=400)
+
+    # Wrap the entire logic in a try except to undo everything if something wrong happens
+    try:
+        # Get total value
+        total_price = user_cart.aggregate(total=Sum(F("product__price") * F("quantity")))["total"] or 0
+
+        # Create order
+        user_order = Order.objects.create(
+            user=request.user,
+            total_price= total_price,
+        )
+
+        # Copy data to orders
+        for item in user_cart:
+            # Final quantity check to avoid 2 users purchasing with the last item
+            if item.quantity > item.product.quantity:
+                raise ValueError(f" We can't complete the purchase of product: {item.product.name}. We're just sold out.")
+            
+            order_item = OrderItem.objects.create(
+                order=user_order,
+                product= item.product,
+                quantity=item.quantity,
+                price_at_purchase=item.product.price,
+            )
+
+            # Update product quantity
+            item.product.quantity -= item.quantity
+            item.product.save()
+
+        # Clear shopping cart
+        user_cart.delete()
+    except ValueError as error:
+        return JsonResponse({"error": str(error)}, status=400) 
+    
+    # Return response 
+    return JsonResponse({"message": "Purchase Successfully completed. Thank you for your purchase!"}, status=200) 
 
 
 # User login 

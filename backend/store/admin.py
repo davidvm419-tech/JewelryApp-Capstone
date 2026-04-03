@@ -38,7 +38,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "total_price", "created_at")
 
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ("id", "order", "product", "added_at")
+    list_display = ("id", "order", "product", "quantity", "price_at_purchase","added_at")
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Category, CategoryAdmin)

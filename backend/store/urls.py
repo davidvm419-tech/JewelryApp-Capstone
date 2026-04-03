@@ -31,5 +31,6 @@ urlpatterns = [
     # User paths (remember the ending / so react and Django communicate)
     path("api/register/", (views.register_view), name="register"),
     path("api/login/", views.login_view, name="login"),
+    path("api/buy", views.buy_view, name="buy_view"),
     path("api/logout/",views.logout_view, name="logout"),
 ]

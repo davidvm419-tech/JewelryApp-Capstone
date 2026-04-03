@@ -71,26 +71,58 @@ function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue }) {
         }
     }
 
-    // Handle final checkout
-    async function orderCreation() {
-
-    }
 
     // Handle delete from cart
     async function handleDelete(itemId) {
-        // Send data to backend
-        const {data, ok} = await deleteFromCart(itemId)
-        // Get response
-        if (!ok) {
-            setError(data.error)
-        } else {
-            setCartChange( prev => prev.filter( item =>
-                item.id !== itemId)
-            )
-            setMessage(data.message)
+        try {
+            // Send data to backend
+            const {data, ok} = await deleteFromCart(itemId)
+            // Get response
+            if (!ok) {
+                setError(data.error)
+            } else {
+                setCartChange( prev => prev.filter( item =>
+                    item.id !== itemId)
+                )
+                setMessage(data.message)
+            }
+            // Refresh state for userbox
+            onCartChange()
+        } catch (err) {
+            console.log(`Error: ${err}`)
         }
-        // Refresh state for userbox
-        onCartChange()
+    }
+
+    // Handle final checkout
+    async function orderCreation() {
+        try{
+            // Send data to backend
+            const response = await fetch("/api/buy", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken"),
+                },
+                credentials: "include",
+            });
+
+            const data = await response.json();
+            // Get response
+            if (!response.ok) {
+                setError(data.error)
+            } else {
+                setMessage(data.message)
+                // If everything is ok send the user to catalog
+                setTimeout(() => {
+                    navigate("/catalog")
+                }, 3000)
+            }
+            // Refresh state for userbox
+            onCartChange()
+
+        } catch (err) {
+            console.log(`Error: ${err}`)
+        }
     }
 
     return (

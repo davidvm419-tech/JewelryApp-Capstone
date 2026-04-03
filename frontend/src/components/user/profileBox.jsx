@@ -15,7 +15,7 @@ function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart
     const userMenu = [
         {name: `Shopping Cart (${shoppingCart?.length || 0})`, href: "/cart"},
         {name: `Wishlist (${wishlist?.length || 0})`, href: "/wishlist"},
-        {name: `Orders`, href: "/orders"},
+        {name: `Orders history`, href: "/orders"},
         {name: `Settings`, href: "/settings"},
     ]
     
