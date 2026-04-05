@@ -32,5 +32,7 @@ urlpatterns = [
     path("api/register/", (views.register_view), name="register"),
     path("api/login/", views.login_view, name="login"),
     path("api/buy", views.buy_view, name="buy_view"),
+    path("api/orders", views.user_orders, name="user_orders"),
+    path("api/user/settings", views.user_settings, name="user_settings"),
     path("api/logout/",views.logout_view, name="logout"),
 ]

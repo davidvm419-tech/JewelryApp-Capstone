@@ -4,9 +4,11 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db import IntegrityError, transaction
 from django.db.models import Avg, F, Sum
+from decimal import Decimal
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 import json
@@ -18,6 +20,9 @@ from .helpers import paginate
 
 # Create your views here.
 
+# Service rate fee convert the fee as a Decimal from a string for precision
+SERVICE_RATE = Decimal("2.00")
+
 # Generate token and send user information if is authenticated for user information
 def get_session(request):
     is_authenticated = request.user.is_authenticated
@@ -27,10 +32,11 @@ def get_session(request):
         user_id = request.user.id
         wishlist = Wishlist.objects.filter(user_id=user_id).all()
         shopping_cart = CartItem.objects.filter(user_id=user_id).all()
-        orders = Order.objects.filter(user_id=user_id).all()
+
         # Send the total cart value to the frontend Sum and F perform the calculations in the rows of the table
         cart_value = CartItem.objects.filter(user=request.user).aggregate(
             total=Sum(F("product__price") * F("quantity")))["total"] or 0
+        
         # Return response
         return JsonResponse({
             "token": get_token(request),
@@ -40,7 +46,7 @@ def get_session(request):
             "wishlist": [item.serialize(request) for item in wishlist],
             "shopping_cart": [item.serialize(request) for item in shopping_cart],
             "cart_total_value": float(cart_value),
-            "orders": [order.serialize() for order in orders],
+            "service_rate": float(SERVICE_RATE),
         })
     else:
         # if not return default values
@@ -430,9 +436,12 @@ def buy_view(request):
         total_price = user_cart.aggregate(total=Sum(F("product__price") * F("quantity")))["total"] or 0
 
         # Create order
+        date = timezone.now()
+        order_number = f"ORD-#{date.strftime('%y%m%d')}-{request.user.id}-{date.strftime('%H%M%S')}"
         user_order = Order.objects.create(
             user=request.user,
-            total_price= total_price,
+            order_number = order_number,
+            total_price= total_price + SERVICE_RATE,
         )
 
         # Copy data to orders
@@ -459,6 +468,38 @@ def buy_view(request):
     
     # Return response 
     return JsonResponse({"message": "Purchase Successfully completed. Thank you for your purchase!"}, status=200) 
+
+# Get user orders
+@login_required
+def user_orders(request):
+    # Confirm method
+    if request.method != "POST":
+        return JsonResponse({"error": "Wrong method, POST expected"}, status=400)
+    
+    # Get user orders
+    user_orders = Order.objects.filter(user=request.user).all()
+
+    items_per_page = 5
+
+    # Send data to create pagination
+    page_obj, pagination = paginate(user_orders, request.GET.get("page"), items_per_page)    
+    
+    # return response
+    return JsonResponse({
+        "orders": [order.serialize(request) for order in page_obj.object_list],
+        "pagination": pagination, }, 
+        status=200)
+
+
+# User Settings
+@login_required
+def user_settings(request):
+    # Confirm method
+    if request.method != "POST":
+        return JsonResponse({"error": "Wrong method, POST expected"}, status=400)
+
+    # Return response
+    return JsonResponse({"user_data": request.user.serialize()})
 
 
 # User login 

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { getCookie } from '../../utils';
 
 
-function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart, orders, logoutSuccess }) {
+function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart, logoutSuccess }) {
     const navigate = useNavigate();
 
     // User menu items

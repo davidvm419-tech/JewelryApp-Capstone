@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom"
 
 
 function ProductDetails({ isAuthenticated, userId, username,  
-                        wishlist, shoppingCart, orders, onCartChange, logoutSuccess }) {
+                        wishlist, shoppingCart, onCartChange, logoutSuccess }) {
     // Set state ofr loading to better user experience
     const [isLoading, setIsLoading] = useState(true);
     // Get id from the url
@@ -68,8 +68,7 @@ function ProductDetails({ isAuthenticated, userId, username,
         <div className="min-h-screen bg-slate-50 flex flex-col">
             {/* navbar*/}
             <Navbar isAuthenticated={isAuthenticated} userId={userId} username={username} 
-                wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
-                logoutSuccess={logoutSuccess} />
+                wishlist={wishlist} shoppingCart={shoppingCart} logoutSuccess={logoutSuccess} />
             <main className="flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
                 <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden mb-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">

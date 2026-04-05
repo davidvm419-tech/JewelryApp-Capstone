@@ -1,7 +1,7 @@
 import './App.css';
 import React from 'react';
 
-//Utils functions
+// Utils functions
 import {fetchSession} from "./utils";
 
 // Utility component
@@ -36,6 +36,7 @@ function App() {
   const [wishlist, setWishlist] = useState([]);
   const [shoppingCart, setShoppingCart] = useState([]);
   const [cartTotalValue, setCartTotalValue] = useState(0);
+  const [serviceRate, setServiceRate] = useState(0);
   const [orders, setOrders] = useState([]) 
 
   // Set state ofr loading to better user experience
@@ -54,6 +55,7 @@ function App() {
         setWishlist(data.wishlist)
         setShoppingCart(data.shopping_cart)
         setCartTotalValue(data.cart_total_value)
+        setServiceRate(data.service_rate)
         setOrders(data.orders) 
         setIsLoading(false)        
       } else {
@@ -63,6 +65,7 @@ function App() {
           setWishlist([])
           setShoppingCart([])
           setCartTotalValue(0)
+          setServiceRate(0)
           setOrders([])
           setIsLoading(false)
       }
@@ -86,12 +89,12 @@ function App() {
         {/* Route to catalog */}
         <Route path="/catalog" element={<Catalog 
           isAuthenticated={isAuthenticated} userId={userId} username={username} 
-          wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
+          wishlist={wishlist} shoppingCart={shoppingCart} 
           wishListChange={autCheck} logoutSuccess={autCheck} />}/>
         {/* Route to specific category */}
         <Route path="/catalog/:id" element={<Catalog 
           isAuthenticated={isAuthenticated} userId={userId} username={username} 
-          wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
+          wishlist={wishlist} shoppingCart={shoppingCart} 
           wishListChange={autCheck} logoutSuccess={autCheck} />}/>
         {/* Route to product details */}
         <Route path="/product/:id" element={<ProductDetails 
@@ -99,21 +102,22 @@ function App() {
           wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
           onCartChange={autCheck} logoutSuccess={autCheck} />} />
         {/* Route to wishlist */}
-        <Route path="/wishlist" element={<Wishlist wishlist={wishlist} 
-          wishListChange={autCheck} onCartChange={autCheck} />}/>
+        <Route path="/wishlist" element={isAuthenticated ? <Wishlist wishlist={wishlist} 
+          wishListChange={autCheck} onCartChange={autCheck} /> : <Navigate to="/login" />}/>
         {/* Route to cart */}
-        <Route path="/cart" element={<ShoppingCart shoppingCart={shoppingCart} cartTotalValue={cartTotalValue}
-          onCartChange={autCheck} />}/>
+        <Route path="/cart" element={isAuthenticated ? <ShoppingCart 
+          shoppingCart={shoppingCart} cartTotalValue={cartTotalValue} serviceRate={serviceRate}
+          onCartChange={autCheck} /> : <Navigate to="/login" /> }/>
         {/* Route to orders */}
-        <Route path="/orders" element={<UserOrders 
+        <Route path="/orders" element={isAuthenticated ? <UserOrders 
           isAuthenticated={isAuthenticated} userId={userId} username={username} 
-          wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
-          logoutSuccess={autCheck}/>} />
+          wishlist={wishlist} shoppingCart={shoppingCart} logoutSuccess={autCheck}/>
+          : <Navigate to="/login" />} />
         {/* Route to user settings */}
-        <Route path="/settings" element={<UserSettings 
+        <Route path="/settings" element={isAuthenticated ? <UserSettings 
           isAuthenticated={isAuthenticated} userId={userId} username={username} 
           wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
-          logoutSuccess={autCheck}/>} />
+          logoutSuccess={autCheck} /> : <Navigate to="/login" />} />
         {/* Avoid users to login or register if they are login */}
         <Route path="/login" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Login loginSuccess={autCheck}/>} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Register registerSuccess={autCheck}/>} />

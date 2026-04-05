@@ -19,7 +19,7 @@ function classNames(...classes) {
 }
 
 
-function Navbar({ isAuthenticated, userId, username,  wishlist, shoppingCart, orders, logoutSuccess }) {
+function Navbar({ isAuthenticated, userId, username,  wishlist, shoppingCart, logoutSuccess }) {
   
   const navigate = useNavigate();
 
@@ -61,8 +61,7 @@ function Navbar({ isAuthenticated, userId, username,  wishlist, shoppingCart, or
                 {/* Profile dropdown */}
                 <ProfileBox 
                   isAuthenticated={isAuthenticated} userId={userId} username={username} 
-                  wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
-                  logoutSuccess={logoutSuccess} />
+                  wishlist={wishlist} shoppingCart={shoppingCart} logoutSuccess={logoutSuccess} />
               </div>
             </div>
           </div>

@@ -15,7 +15,7 @@ import { Link, useParams } from 'react-router-dom';
 import { fetchCatalog } from '../../utils';
 
 export default function Catalog({ isAuthenticated, userId, username,  
-                                  wishlist, shoppingCart, orders, wishListChange, logoutSuccess }) {
+                                  wishlist, shoppingCart, wishListChange, logoutSuccess }) {
   // Set state ofr loading to better user experience
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
@@ -32,7 +32,7 @@ export default function Catalog({ isAuthenticated, userId, username,
   useEffect(() => {
     const loadData = async () => {
       const {data, ok} = await fetchCatalog(page, categoryId);
-      // In case somethhing worng hhappens display the user a message
+      // In case somethhing worng hhappens display a message to the user
       if (!ok) {
         setError(true)
       } else {
@@ -64,8 +64,7 @@ export default function Catalog({ isAuthenticated, userId, username,
     <div className="min-h-screen bg-slate-50 flex flex-col">
       {/* navbar*/}
       <Navbar isAuthenticated={isAuthenticated} userId={userId} username={username} 
-        wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
-        logoutSuccess={logoutSuccess} />
+        wishlist={wishlist} shoppingCart={shoppingCart} logoutSuccess={logoutSuccess} />
       
       {/* Catalog content*/}
       <main className="max-w-7xl mx-auto py-12 px-4 flex-grow">

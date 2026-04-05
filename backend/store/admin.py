@@ -35,7 +35,7 @@ class CartItemAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "product", "quantity", "added_at")
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "total_price", "created_at")
+    list_display = ("id", "user", "order_number", "total_price", "created_at")
 
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ("id", "order", "product", "quantity", "price_at_purchase","added_at")

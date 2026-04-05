@@ -7,15 +7,14 @@ import { useNavigate } from "react-router-dom";
 // Hooks
 import { useState, useEffect } from "react";
 
-function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue }) {
+function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue, serviceRate }) {
     // Set navigation
     const navigate = useNavigate();
-    // Service rates
-    const serviceRate = 2.00;   
 
     // Set states
     const [cartChange, setCartChange] = useState(shoppingCart);
-    const [cartTotalValueChange, setartTotalValueChange] = useState(cartTotalValue);
+    const [cartTotalValueChange, setCartTotalValueChange] = useState(cartTotalValue);
+    const [serviceRateChange, setServiceRateChange] = useState(serviceRate);
     const [message, setMessage] = useState("");
     const [alertMessage, setAlertMessage] = useState("");
     const [error, setError] = useState("");
@@ -36,7 +35,8 @@ function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue }) {
     // Sync local cart with global cart to update quantities
     useEffect(() => {
         setCartChange(shoppingCart)
-        setartTotalValueChange(cartTotalValue)
+        setCartTotalValueChange(cartTotalValue)
+        setServiceRateChange(serviceRate)
     }, [shoppingCart, cartTotalValue])
 
 
@@ -232,12 +232,12 @@ function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue }) {
                                     <span>Subtotal</span><span className="text-slate-900">${cartTotalValueChange}</span>
                                 </div>
                                 <div className="flex justify-between items-center text-slate-500 font-bold">
-                                    <span>Service Fee</span><span className="text-slate-900">${serviceRate}</span>
+                                    <span>Service Fee</span><span className="text-slate-900">${serviceRateChange}</span>
                                 </div>
                             </div>
                             <div className="flex justify-between items-center pt-6 mb-8">
                                 <span className="text-base font-black text-[#1B3A57]">Order total</span>
-                                <span className="text-2xl font-black text-slate-900">${cartTotalValueChange + serviceRate}</span>
+                                <span className="text-2xl font-black text-slate-900">${cartTotalValueChange + serviceRateChange}</span>
                             </div>
                             
                             <button className="w-full py-4 bg-[#1B3A57] hover:bg-[#102A40] text-white rounded-2xl 

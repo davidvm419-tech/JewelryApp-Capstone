@@ -41,10 +41,7 @@ JewelryApp-Capstone — Functional Specifications
 -----------------------------------
 - View available categories
 - Filter products by category
-- Sort products by:
-  - Price
-  - Rating
-  - Date added
+
 
 5. Wishlist (Login Required) (Ok)
 ----------------------------
@@ -55,7 +52,7 @@ JewelryApp-Capstone — Functional Specifications
   - Move items from wishlist to cart
 - Wishlist is stored in the backend and tied to the user account.
 
-6. Shopping Cart (Login Required)
+6. Shopping Cart (Login Required) (Ok)
 ---------------------------------
 - Authenticated users can:
   - Add products to the cart
@@ -68,13 +65,12 @@ JewelryApp-Capstone — Functional Specifications
   - Local persistence (localStorage)
   - Backend synchronization when logged in
 
-7. Ready-to-Purchase View (Login Required)
+7. Orders history (Login Required) (Ok)
 ------------------------------------------
 - Before completing a purchase, the user sees:
   - Summary of selected products
   - Quantities
   - Total price
-  - Required personal information (address, etc.)
 
 8. User Profiles
 ----------------

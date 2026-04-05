@@ -10,6 +10,19 @@ from django.utils import timezone
 class User(AbstractUser):
     pass
 
+    def serialize(self):
+        return {
+            "username_first_char": self.username[0].capitalize(),
+            "username": self.username,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "complete_name": f"{self.first_name} {self.last_name}",
+            "orders_quantity": self.orders.count(),
+            "comments_quantity": self.comments.count(),
+            "ratings_quantity": self.ratings.count(),
+            "member_since": self.date_joined.strftime("%B-%Y"),
+        }
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -203,20 +216,23 @@ class CartItem(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    order_number =models.CharField(max_length=25, unique=True, editable=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     # Order by newest
     class Meta:
         ordering = ["-created_at"]
 
-    def serialize(self):
+    def serialize(self, request):
         local_time = timezone.localtime(self.created_at)
         return {
                 "id": self.id,
                 "user_id": self.user.id,
-                "total_price": self.total_price,
-                "created_at": local_time.strftime("Purchase at: %d-%m-%Y"),
+                "order_number": self.order_number,
+                "total_price": float(self.total_price),
+                "created_at": local_time.strftime("%d-%m-%Y"),
+                "items": [item.serialize(request) for item in self.items.all()],
             }
 
 
@@ -226,20 +242,23 @@ class OrderItem(models.Model):
     # Avoid adding 0 items to an order from the model itself
     quantity = models.IntegerField(
         validators=[MinValueValidator(1)])
-    price_at_purchase = models.DecimalField(max_digits=10, decimal_places=2)
+    price_at_purchase = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
     added_at = models.DateTimeField(auto_now_add=True)
 
     # Order by newest
     class Meta:
         ordering = ["-added_at"]
 
-    def serialize(self):
+    def serialize(self, request):
         local_time = timezone.localtime(self.added_at)
         return {
             "id": self.id,
             "order_id": self.order.id,
             "product_id": self.product.id,
+            "product_name": self.product.name,
+            "product_image": self.product.main_image(request),
             "quantity": self.quantity,
-            "price_at_purchase": self.price_at_purchase,
+            "price_at_purchase": float(self.price_at_purchase),
             "added_at": local_time.strftime("Added at: %d-%m-%Y"),  
         }
+    
