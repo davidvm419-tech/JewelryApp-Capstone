@@ -1,6 +1,6 @@
 import React from 'react';
 import {getCookie} from "../../utils";
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 
@@ -17,6 +17,17 @@ function Login({loginSuccess}) {
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
 
+    // Effect for mesages
+    useEffect(() => {
+        if (message || error) {
+            const timer = setTimeout(() => {
+                setMessage("")
+                setError("")
+            }, 3000)
+            return () => clearTimeout(timer);
+        }
+    }, [message, error])
+
     // Handle input
     const handleChange = (e) => {
         setFormData({
@@ -30,12 +41,8 @@ function Login({loginSuccess}) {
     async function handleSubmit(e) {
         e.preventDefault()
 
-        // Clean messages
-        setError("")
-        setMessage("")
-
         try {
-            const response = await fetch(`/api/login/`, {
+            const response = await fetch(`/api/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

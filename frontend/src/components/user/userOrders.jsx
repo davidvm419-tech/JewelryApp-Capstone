@@ -21,22 +21,35 @@ function UserOrders({ isAuthenticated, userId, username,
     const [isLoading, setIsLoading] = useState(true);
 
     // Effect for orders change and pagination
-    
     useEffect(()=> {
-        fetch(`/api/orders?page=${page}`, { 
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCookie("csrftoken"),
-        },
-        credentials: "include",
-        }) 
-        .then(response => response.json())
-        .then(data => {
-            setOrders(data.orders)
-            setPages(data.pagination)
-            setIsLoading(false)
-        })
+        const fetchOrders = async () => {
+            try {
+                const response = await fetch(`/api/orders?page=${page}`, { 
+                method: "POST",
+                 headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken"),
+                },
+                credentials: "include",
+                });
+
+                if (!response.ok) {
+                    throw new Error("Network error")
+                }
+
+                const data =await response.json()
+                setOrders(data.orders)
+                setPages(data.pagination)
+
+            } catch (error) {
+                console.log(`Error ${error}`)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        fetchOrders()
+
     }, [page])
 
     if (isLoading) {

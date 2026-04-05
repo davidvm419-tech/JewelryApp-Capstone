@@ -1,6 +1,6 @@
 import React from 'react';
 import {getCookie} from "../../utils";
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 
 function Register({registerSuccess}) {
@@ -21,6 +21,30 @@ function Register({registerSuccess}) {
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
 
+
+    // Check valid password parametes
+    const validPassword = () => {
+        if (formData.password.length < 8) {
+            return false;
+        }
+        for (let char of formData.password) {
+            if (char >= "0" && char <= "9") {
+                return true;
+            }
+        }
+        return false;
+    }
+    // Effect for mesages
+    useEffect(() => {
+        if (message || error) {
+            const timer = setTimeout(() => {
+                setMessage("")
+                setError("")
+            }, 3000)
+            return () => clearTimeout(timer);
+        }
+    }, [message, error])
+
     // Handle change form
     const handleChange = (e) => {
         setFormData({
@@ -33,12 +57,8 @@ function Register({registerSuccess}) {
     async function handleSubmit(e) {
         e.preventDefault()
     
-        // Clean messages
-        setError("")
-        setMessage("")
-
         try {
-            const response = await fetch(`/api/register/`, {
+            const response = await fetch(`/api/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -103,6 +123,13 @@ function Register({registerSuccess}) {
                     onChange={handleChange} placeholder="Password" required/>
                     <input type="password" name="confirmation" value={formData.confirmation}
                     onChange={handleChange} placeholder="Confirm your password" required/>
+                    {formData.password.length > 3  && formData.confirmation.length > 3 
+                    && formData.password !== formData.confirmation ? (
+                        <p className="text-red-600 text-sm mt-1 ml-2">Passwords do not match</p>
+                    ) : null}  
+                    {formData.password.length > 3 && !validPassword() ? (
+                        <p className="text-red-600 text-sm mt-1 ml-2">Password must have at least 8 characters and 1 number</p>
+                    ) : null}
                     <button type="submit">Register!</button>
                     <h2 onClick={() => navigation("/login")} className="link">Already registered?</h2>
                 </form>

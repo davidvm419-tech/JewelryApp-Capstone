@@ -1,4 +1,7 @@
-from django.contrib.auth import authenticate, login, logout
+from urllib import request
+
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
@@ -500,6 +503,129 @@ def user_settings(request):
 
     # Return response
     return JsonResponse({"user_data": request.user.serialize()})
+
+# Update personal details
+@login_required
+def details_update(request):
+    # Confirm method
+    if request.method != "PUT":
+        return JsonResponse({"error": "Wrong method, PUT expected"}, status=400)
+    # Get JSON data
+    try: 
+        data = json.loads(request.body)
+    except:
+        return JsonResponse({"error": "Error recieving data, JSON data invalid"}, status=400)
+    first_name = data.get("firstName", "").strip()
+    last_name = data.get("lastName", "").strip()
+
+    # Validate data
+    if not first_name or not last_name:
+        return JsonResponse({"error": "First name and last name are required"}, status=400)
+    
+    # Update data
+    request.user.first_name = first_name
+    request.user.last_name = last_name
+    request.user.save()
+
+    # Return response
+    return JsonResponse({
+        "user_data": request.user.serialize(),
+        "message": "Personal details updated successfully!"
+        }, status=200)
+
+
+# Update email
+@login_required
+def email_update(request):
+    # Confirm method
+    if request.method != "PUT":
+        return JsonResponse({"error": "Wrong method, PUT expected"}, status=400)
+    
+    # Get JSON data
+    try: 
+        data = json.loads(request.body)
+    except:
+        return JsonResponse({"error": "Error recieving data, JSON data invalid"}, status=400)
+    prev_email = data.get("prevEmail", "").strip()
+    new_email = data.get("newEmail", "").strip()
+    confirmation = data.get("newEmailConfirmation", "").strip()
+
+    # Confirm user identity with prev email
+    user = request.user
+    if user.email != prev_email:
+        return JsonResponse({"error": "Current email incorrect"}, status=403)
+    
+    # Ensure update is not with the same email
+    if  prev_email == new_email:
+        return JsonResponse({"error": "This is already your current email"}, status=400)
+    
+    # Ensure that the new email is not already in use
+    if User.objects.filter(email=new_email).exists():
+        return JsonResponse({"error": "Email already registered"}, status=400)
+
+    # Validate data
+    try:
+        validate_email(new_email)
+        validate_email(confirmation)
+    except ValidationError:
+        return JsonResponse({"error": "invalid email"}, status=400)
+    
+    if new_email != confirmation:
+        return JsonResponse({"error": "new emails don't match"}, status=400)
+    
+    # Update data
+    request.user.email = new_email
+    request.user.save()
+
+    # Return response
+    return JsonResponse({"message": "Email updated successfully!"}, status=200)
+
+
+# Update Password
+@login_required
+def password_update(request):
+    # Confirm method
+    if request.method != "PUT":
+        return JsonResponse({"error": "Wrong method, PUT expected"}, status=400)
+    
+    # Get JSON data
+    try: 
+        data = json.loads(request.body)
+    except:
+        return JsonResponse({"error": "Error recieving data, JSON data invalid"}, status=400)
+    prev_password = data.get("prevPassword", "").strip()
+    new_password = data.get("newPassword", "").strip()
+    confirmation = data.get("newPasswordConfirmation", "").strip()
+
+    # Confirm user identity with prev password
+    if not request.user.check_password(prev_password):
+        return JsonResponse({"error": "Current password incorrect"}, status=403)
+    
+    # Validate data
+    # Check password constrains (8 char and 1 number) and passwords match
+    if len(new_password) < 8:
+        return JsonResponse({"error": "password must have at least 8 characters and 1 number!"}, status=400) 
+    
+    is_digit = False
+    for char in new_password:
+        if char.isdigit():
+            is_digit = True
+            break
+    if not is_digit:
+        return JsonResponse({"error": "password must have at least 8 characters and 1 number!"}, status=400)
+
+    if new_password != confirmation:
+        return JsonResponse({"error": "passwords don't match!"}, status=400)
+    
+    # Update data isun
+    request.user.set_password(new_password)
+    request.user.save()
+
+    # Refresh user session to avoid logout
+    update_session_auth_hash(request, request.user)
+
+    # Return response
+    return JsonResponse({"message": "Password updated successfully!"}, status=200)
 
 
 # User login 

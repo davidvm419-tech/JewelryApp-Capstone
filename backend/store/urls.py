@@ -28,11 +28,14 @@ urlpatterns = [
     path("api/cart/update/<int:product_id>/<str:quantity_change>", views.update_cart, name="add_to_cart"),
     path("api/cart/delete/<int:cart_item_id>", views.delete_from_cart, name="delete_from_cart"),
 
-    # User paths (remember the ending / so react and Django communicate)
-    path("api/register/", (views.register_view), name="register"),
-    path("api/login/", views.login_view, name="login"),
+    # User paths 
+    path("api/register", (views.register_view), name="register"),
+    path("api/login", views.login_view, name="login"),
     path("api/buy", views.buy_view, name="buy_view"),
     path("api/orders", views.user_orders, name="user_orders"),
     path("api/user/settings", views.user_settings, name="user_settings"),
+    path("api/user/updateDetails", views.details_update, name="details_update"),
+    path("api/user/updateEmail", views.email_update, name="email_update"),
+    path("api/user/updatePassword", views.password_update, name="password_update"),
     path("api/logout/",views.logout_view, name="logout"),
 ]
