@@ -95,7 +95,7 @@ export default function Catalog({ isAuthenticated, userId, username,
                     {product.rating_avg === null ? (
                       <p className="text-sm font-semibold text-slate-700">Product not rated yet</p>
                     ) : (
-                      <span className="text-sm font-semibold text-slate-700">Avg rating: {product.rating_avg}</span>
+                      <span className="text-sm font-semibold text-slate-700">Avg rating: {product.rating_avg?.toFixed(2)}</span>
                     )}
                       <p className="text-xl font-bold text-black">${product.price}</p>
                   </div>

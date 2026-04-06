@@ -2,6 +2,8 @@
 
 This is a modern **Single Page Application (SPA)** built for CS50W’s *Capstone* and designed for my friend Geraldine’s upcoming jewelry business.
 
+**You can see a video demo here:** [Geraldine Jewels - Project Showcase](https://www.youtube.com/watch?v=es6B5ec65nk)
+
 ---
 
 ## Distinctiveness and Complexity
@@ -22,8 +24,11 @@ The feature set goes far beyond the requirements of the "Commerce" assignment:
 *  **Account Security:** High-security features including real-time password complexity validation on the frontend and session-safe updates using Django’s `update_session_auth_hash` on the backend.
 *  **Mobile-First Design:** I moved away from standard Bootstrap grids to implement a fully custom, mobile-responsive design using **Tailwind CSS**, ensuring the shop is accessible on any device.
 
-## Additional Information
+### Additional Information
 This project utilizes **Tailwind CSS** for its utility-first styling approach, allowing for a highly customized and responsive UI. All authentication flows are secured using Django's built-in hashing and session management, bridged to the React frontend via secure Fetch calls.
+
+### Note on Media and Assets
+The product images used in this demonstration were sourced from the internet for illustrative and educational purposes only.
 
 ---
 

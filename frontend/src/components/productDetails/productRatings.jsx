@@ -96,7 +96,7 @@ function ProductRatings({ratings, avg_rating, productId, userId}) {
             <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-slate-800">Ratings</h3>
                 <div className="flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
-                    <span className="text-sm font-semibold text-slate-700">Avg: {avgChange || "0"}</span>
+                    <span className="text-sm font-semibold text-slate-700">Avg: {avgChange.toFixed(2)|| "0"}</span>
                     <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                     </svg>
@@ -114,8 +114,7 @@ function ProductRatings({ratings, avg_rating, productId, userId}) {
             </div>}
 
             {/* Display rating information */}
-            {!avgChange ? <p>Product not rated yet!</p> : 
-            <p>Average Rating: {avgChange}</p>}
+
             <div className="space-y-4 mb-8">
                 {ratingChange.length === 0 ? (
                     <p className="text-center text-slate-400 py-4 italic text-sm">No ratings yet. Be the first one!</p>
