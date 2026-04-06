@@ -92,10 +92,10 @@ export default function Catalog({ isAuthenticated, userId, username,
                   )}
                   <div className="px-4 py-6 w-full flex flex-col items-center text-center">
                     <h2 className="text-lg font-semibold text-[#1B3A57]">{product.name}</h2>
-                    {!product.rating ? (
-                      <p className="text-black-400 text-sm">Product not rated yet</p>
+                    {product.rating_avg === null ? (
+                      <p className="text-sm font-semibold text-slate-700">Product not rated yet</p>
                     ) : (
-                      <p className="text-[#1B3A57] font-medium">{product.rating}</p>
+                      <span className="text-sm font-semibold text-slate-700">Avg rating: {product.rating_avg}</span>
                     )}
                       <p className="text-xl font-bold text-black">${product.price}</p>
                   </div>

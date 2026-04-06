@@ -47,7 +47,6 @@ function ProductComments({ comments, productId, userId }) {
             if (!response.ok) { 
                 setError(data.error) 
             } else {
-                console.log(data)
                 setMessage(data.message)
                 setCommentChange(prev => [data.new_comment, ...prev])
                 // Clear comment box
