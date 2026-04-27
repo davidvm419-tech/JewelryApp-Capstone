@@ -27,7 +27,6 @@ dist-ssr
 venv/
 *.pyc
 __pycache__/
-db.sqlite3
 
 # React/Vite
 node_modules/
