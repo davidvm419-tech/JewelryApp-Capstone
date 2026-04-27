@@ -51,6 +51,9 @@ CSRF_TRUSTED_ORIGINS = [
     FRONTEND_URL,
     "https://geraldine-jewelry-app.vercel.app",
 ]
+
+APPEND_SLASH = False
+
 # --- PRODUCTION SECURITY SETTINGS ---
 
 # Only allow credentials (cookies/headers) over HTTPS in production
