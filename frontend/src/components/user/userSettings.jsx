@@ -14,6 +14,10 @@ import { useState, useEffect } from 'react';
 function UserSettings({ isAuthenticated, userId, username,  
                     wishlist, shoppingCart, logoutSuccess }) {
 
+    // API
+    const apiBase = import.meta.env.VITE_API_URL
+    
+    
     // Set states
     const [userData, setUserData] = useState([]);
     const [userDetails, setUserDetails] =useState({
@@ -63,7 +67,7 @@ function UserSettings({ isAuthenticated, userId, username,
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch("/api/user/settings", {
+                const response = await fetch(`${apiBase}/api/user/settings`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -112,7 +116,7 @@ function UserSettings({ isAuthenticated, userId, username,
         e.preventDefault()
         // Send data to backend
         try {
-            const response = await fetch("/api/user/updateDetails", {
+            const response = await fetch(`${apiBase}/api/user/updateDetails`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -152,7 +156,7 @@ function UserSettings({ isAuthenticated, userId, username,
         e.preventDefault()
         // Send data to backend
         try {
-            const response = await fetch("/api/user/updateEmail", {
+            const response = await fetch(`${apiBase}/api/user/updateEmail`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -193,7 +197,7 @@ function UserSettings({ isAuthenticated, userId, username,
         e.preventDefault()
         // Send data to backend
         try {
-            const response = await fetch("/api/user/updatePassword", {
+            const response = await fetch(`${apiBase}/api/user/updatePassword`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

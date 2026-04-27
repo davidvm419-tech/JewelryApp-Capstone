@@ -4,6 +4,9 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 
 function Register({registerSuccess}) {
+    // API
+    const apiBase = import.meta.env.VITE_API_URL
+
     // navigation to login
     const navigation = useNavigate();
 
@@ -58,7 +61,7 @@ function Register({registerSuccess}) {
         e.preventDefault()
     
         try {
-            const response = await fetch(`/api/register`, {
+            const response = await fetch(`${apiBase}/api/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

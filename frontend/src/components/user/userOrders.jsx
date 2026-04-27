@@ -14,6 +14,9 @@ import { useState, useEffect } from 'react';
 
 function UserOrders({ isAuthenticated, userId, username,  
                     wishlist, shoppingCart, logoutSuccess }) {
+    // API
+    const apiBase = import.meta.env.VITE_API_URL
+    
     // Set states
     const [orders, setOrders] = useState([]);
     const [pages, setPages] = useState({});
@@ -24,7 +27,7 @@ function UserOrders({ isAuthenticated, userId, username,
     useEffect(()=> {
         const fetchOrders = async () => {
             try {
-                const response = await fetch(`/api/orders?page=${page}`, { 
+                const response = await fetch(`${apiBase}/api/orders?page=${page}`, { 
                 method: "POST",
                  headers: {
                     "Content-Type": "application/json",

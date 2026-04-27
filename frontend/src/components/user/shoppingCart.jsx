@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue, serviceRate }) {
+    // API
+    const apiBase = import.meta.env.VITE_API_URL
+    
     // Set navigation
     const navigate = useNavigate();
 
@@ -44,7 +47,7 @@ function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue, serviceRate 
     async function productQuantity(productId, quantityChange) {
         // Send data to backend
         try {
-            const response = await fetch(`/api/cart/update/${productId}/${quantityChange}`, {
+            const response = await fetch(`${apiBase}/api/cart/update/${productId}/${quantityChange}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -97,7 +100,7 @@ function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue, serviceRate 
     async function orderCreation() {
         try{
             // Send data to backend
-            const response = await fetch("/api/buy", {
+            const response = await fetch(`${apiBase}/api/buy`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

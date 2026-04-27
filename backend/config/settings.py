@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -21,18 +23,56 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-rq!6e-w58#d982s=w-nx7vs_a_lhlr7y&j*f6ge#_4w9lvr7jn'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'your-safe-local-key')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# If DEBUG is not set in environment, default to True (local)
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".onrender.com"] 
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3001",
-    "https://localhost:3001",
+
+# CORS & CSRF
+
+# Get the frontend URL from environment variables, or default to localhost
+FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    FRONTEND_URL,
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    FRONTEND_URL,
+]
+# --- PRODUCTION SECURITY SETTINGS ---
+
+# Only allow credentials (cookies/headers) over HTTPS in production
+CORS_ALLOW_CREDENTIALS = True
+
+# When DEBUG is False (Production), we force secure cookies
+if not DEBUG:
+    # Ensure cookies are only sent over HTTPS
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    
+    # 'None' is often required if Frontend and Backend are on different domains 
+    # (e.g., vercel.com and onrender.com)
+    SESSION_COOKIE_SAMESITE = 'None'
+    CSRF_COOKIE_SAMESITE = 'None'
+    # Required for Django to trust the HTTPS proxy (Render/Vercel)
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+else:
+    # Local development settings
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    CSRF_COOKIE_SAMESITE = 'Lax'
+
+# Keep this False if you need to read the CSRF token via JavaScript (React)
+CSRF_COOKIE_HTTPONLY = False 
 
 
 # Application definition
@@ -51,6 +91,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -92,6 +133,13 @@ DATABASES = {
     }
 }
 
+# If the "DATABASE_URL" environment variable exists (it will on Render), use PostgreSQL
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=600,
+        ssl_require=True
+    )
+
 AUTH_USER_MODEL = "store.User"
 
 
@@ -131,32 +179,19 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# IMPORTANT: In production, Django doesn't serve files from STATICFILES_DIRS.
+# When you run 'collectstatic', Django copies everything from your project 
+# into this folder. Your web server (or WhiteNoise) looks HERE for files.
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 STATICFILES_DIRS = [
     BASE_DIR / "frontend" / "static",
 ]
 
+#It allows Django to serve its own static files 
+# (like the Admin CSS) efficiently without needing a separate server like Nginx.
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Load images on the media folder
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-
-# React and Django are on different ports to allow CORS
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:3001",
-    "http://127.0.0.1:3001",
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:3001",
-    "http://127.0.0.1:3001",
-]
-CSRF_COOKIE_HTTPONLY = False  
-
-
-CORS_ALLOW_CREDENTIALS = True
-
-SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_SAMESITE = 'Lax'

@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python
+venv/
+*.pyc
+__pycache__/
+db.sqlite3
+
+# React/Vite
+node_modules/
+dist/
+.env
+.env.local
+
+# MacOS/Windows noise
+.DS_Store
+Thumbs.db

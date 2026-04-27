@@ -4,7 +4,11 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 
+
 function Login({loginSuccess}) {
+    // API
+    const apiBase = import.meta.env.VITE_API_URL
+    
     // navigation
     const navigation = useNavigate();
     // Set form state
@@ -42,7 +46,7 @@ function Login({loginSuccess}) {
         e.preventDefault()
 
         try {
-            const response = await fetch(`/api/login`, {
+            const response = await fetch(`${apiBase}/api/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

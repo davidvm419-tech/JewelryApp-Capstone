@@ -9,6 +9,8 @@ import { getCookie } from '../../utils';
 
 
 function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart, logoutSuccess }) {
+    // API
+    const apiBase = import.meta.env.VITE_API_URL
     const navigate = useNavigate();
 
     // User menu items
@@ -23,7 +25,7 @@ function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart
     // Logout
     async function handleLogout() {
         try {
-            const response = await fetch("/api/logout/", {
+            const response = await fetch(`${apiBase}/api/logout/`, {
                 method: "POST",
                 headers: {"X-CSRFToken": getCookie("csrftoken")},
                 credentials: "include",

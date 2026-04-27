@@ -6,6 +6,9 @@ import { useState, useEffect } from "react";
 
 
 function ProductComments({ comments, productId, userId }) {
+    // API
+    const apiBase = import.meta.env.VITE_API_URL
+
     // Set states
     const [commentChange, setCommentChange] = useState(comments);
     const [commentInput, setCommentInput] = useState(""); 
@@ -31,7 +34,7 @@ function ProductComments({ comments, productId, userId }) {
     // 1. Handle adding a post
     async function handleAddComment() {
         try {
-            const response = await fetch(`/api/comment/${productId}`, {
+            const response = await fetch(`${apiBase}/api/comment/${productId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", 
                     "X-CSRFToken": getCookie("csrftoken"), 
@@ -60,7 +63,7 @@ function ProductComments({ comments, productId, userId }) {
     // 2. Handle editing a comment
     async function handleUpdateComment() {
         try {
-            const response = await fetch(`/api/comment/edit/${productId}`, {
+            const response = await fetch(`${apiBase}/api/comment/edit/${productId}`, {
                 method: "PUT",
                 headers: { 
                     "Content-Type": "application/json", 
@@ -97,7 +100,7 @@ function ProductComments({ comments, productId, userId }) {
         // Confirm he comment to delete
         if (!window.confirm("Delete your comment?")) return;
         try {
-            const response = await fetch(`/api/comment/delete/${comment_id}`, {
+            const response = await fetch(`${apiBase}/api/comment/delete/${comment_id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

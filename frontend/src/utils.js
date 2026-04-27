@@ -3,6 +3,8 @@
  * https://djangoproject.com
  */
 
+const apiBase = import.meta.env.VITE_API_URL
+
 export function getCookie(name) {
 let cookieValue = null;
 if (document.cookie && document.cookie !== '') {
@@ -23,7 +25,7 @@ return cookieValue;
 // Utility function to get user status and data to the frontend
 export async function fetchSession() {
     try {
-        const response = await fetch(`/api/get_session/`, { 
+        const response = await fetch(`${apiBase}/api/get_session/`, { 
           credentials: "include", 
         });
         return await response.json()
@@ -37,7 +39,7 @@ export async function fetchCatalog(page=1, categoryId) {
     // send fetch with category
     if (categoryId) {
         try {
-            const response =await fetch(`/api/catalog/${categoryId}?page=${page}`, {
+            const response =await fetch(`${apiBase}/api/catalog/${categoryId}?page=${page}`, {
                 credentials: "include",
             });
             const data = await response.json();
@@ -51,7 +53,7 @@ export async function fetchCatalog(page=1, categoryId) {
     // Send fetch without category
     try {
 
-        const response = await fetch(`/api/catalog?page=${page}`, {
+        const response = await fetch(`${apiBase}/api/catalog?page=${page}`, {
             credentials: "include",
         });
         const data = await response.json();
@@ -66,7 +68,7 @@ export async function fetchCatalog(page=1, categoryId) {
 // Utility functions to add and delete wishlists items
 export async function addToWishList(productId) {
     try {
-        const response = await fetch(`/api/wishlist/add/${productId}`, {
+        const response = await fetch(`${apiBase}/api/wishlist/add/${productId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -85,7 +87,7 @@ export async function addToWishList(productId) {
 
 export async function deleteFromWishList(wishlistItemId) {
     try {
-        const response = await fetch(`/api/wishlist/delete/${wishlistItemId}`, {
+        const response = await fetch(`${apiBase}/api/wishlist/delete/${wishlistItemId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -106,7 +108,7 @@ export async function deleteFromWishList(wishlistItemId) {
 export async function addToCart(productId) {
 
     try {
-        const response = await fetch(`/api/cart/add/${productId}`, {
+        const response = await fetch(`${apiBase}/api/cart/add/${productId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -124,7 +126,7 @@ export async function addToCart(productId) {
 
 export async function deleteFromCart(cartItemId) {
     try {
-        const response = await fetch(`/api/cart/delete/${cartItemId}`, {
+        const response = await fetch(`${apiBase}/api/cart/delete/${cartItemId}`, {
             method: "delete",
             headers: {
                 "Content-Type": "application/json",

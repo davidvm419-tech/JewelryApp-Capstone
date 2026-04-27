@@ -5,6 +5,9 @@ import {getCookie} from "../../utils";
 import { useState, useEffect } from "react";
 
 function ProductRatings({ratings, avg_rating, productId, userId}) {
+    // API
+    const apiBase = import.meta.env.VITE_API_URL
+    
     // Rating values
     const rateValues = [1, 2, 3, 4, 5]
     
@@ -34,7 +37,7 @@ function ProductRatings({ratings, avg_rating, productId, userId}) {
     // Handle adding a rating
     async function handleAddRating(ratingValue) {
         try {
-            const response = await fetch(`/api/rating/${productId}`, {
+            const response = await fetch(`${apiBase}/api/rating/${productId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -63,7 +66,7 @@ function ProductRatings({ratings, avg_rating, productId, userId}) {
     // Handle editing a rating
      async function handleUpdateRating(ratingValue) {
             try {
-                const response = await fetch(`/api/rating/edit/${productId}`, {
+                const response = await fetch(`${apiBase}/api/rating/edit/${productId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -96,7 +99,7 @@ function ProductRatings({ratings, avg_rating, productId, userId}) {
             <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-slate-800">Ratings</h3>
                 <div className="flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
-                    <span className="text-sm font-semibold text-slate-700">Avg: {avgChange.toFixed(2)|| "0"}</span>
+                    <span className="text-sm font-semibold text-slate-700">Avg: {avgChange === null ? "0" : avgChange.toFixed(2)}</span>
                     <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                     </svg>

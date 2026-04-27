@@ -16,6 +16,10 @@ import { useParams } from "react-router-dom"
 
 function ProductDetails({ isAuthenticated, userId, username,  
                         wishlist, shoppingCart, onCartChange, logoutSuccess }) {
+    
+    // API
+    const apiBase = import.meta.env.VITE_API_URL
+    
     // Set state ofr loading to better user experience
     const [isLoading, setIsLoading] = useState(true);
     // Get id from the url
@@ -35,12 +39,12 @@ function ProductDetails({ isAuthenticated, userId, username,
         async function fetchingProduct() {
             try {
                 // Product data
-                const productResponse = await fetch(`/api/product/${productId}`, {
+                const productResponse = await fetch(`${apiBase}/api/product/${productId}`, {
                     credentials: "include",
                 });
                 const productData = await productResponse.json();
                 // Images data
-                const imagesResponse = await fetch(`/api/images/${productId}`, {
+                const imagesResponse = await fetch(`${apiBase}/api/images/${productId}`, {
                     credentials: "include",
                 });
                 const imagesData = await imagesResponse.json(); 
