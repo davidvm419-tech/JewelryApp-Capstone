@@ -2,7 +2,7 @@
 import Navbar from '../general/navbar';
 import ProductImages from './productImages';
 import ProductRatings from './productRatings';
-import ProductComments from './ProductComments';
+import ProductComments from './productComments';
 import ProductButtons from './productButtons';
 import Footer from '../general/footer';
 
