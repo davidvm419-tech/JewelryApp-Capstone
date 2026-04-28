@@ -47,12 +47,13 @@ function Categories() {
                     <MenuItem className="block px-4 py-2 text-sm">Not categories avaliable at the moment</MenuItem>
                     ) : (
                         categories.map(category => (
-                        <MenuItem key={category.id} className="block px-4 py-2 text-sm 
-                        text-black data-focus:bg-white/5 data-focus:outline-hidden
-                        hover:bg-[#E0F2FE] hover:scale-105 transition-all cursor-pointer rounded-md">
-                            <Link to={`/catalog/${category.id}`}>
-                                <p>{category.category_slug}</p>
-                            </Link>
+                        <MenuItem key={category.id} as={Link} to={`/catalog/${category.id}`}>
+                        {({ active }) => (
+                            <p className={`block px-4 py-2 text-sm text-black rounded-md transition-all
+                                hover:bg-[#E0F2FE] hover:scale-105 cursor-pointer ${active ? "bg-white/5" : ""}`}>
+                                {category.category_slug}
+                            </p>
+                        )}
                         </MenuItem>
                         ))
                     )
