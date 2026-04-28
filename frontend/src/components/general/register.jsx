@@ -3,7 +3,7 @@ import {getCookie} from "../../utils";
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 
-function Register({registerSuccess}) {
+function Register({registerSuccess, csrfToken}) {
     // API
     const apiBase = import.meta.env.VITE_API_URL
 
@@ -65,7 +65,7 @@ function Register({registerSuccess}) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-CSRFToken": csrfToken,
                  },
                 body: JSON.stringify(formData),
                 credentials: "include",

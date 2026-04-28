@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 
 
 
-function Login({loginSuccess}) {
+function Login({loginSuccess, csrfToken}) {
     // API
     const apiBase = import.meta.env.VITE_API_URL
     
@@ -50,7 +50,7 @@ function Login({loginSuccess}) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-CSRFToken": csrfToken,
                  },
                 body: JSON.stringify(formData),
                 credentials: "include",

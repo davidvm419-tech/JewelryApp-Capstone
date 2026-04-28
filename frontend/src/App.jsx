@@ -34,6 +34,7 @@ function App() {
 
   // Set state for user
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [csrfToken, setCsrfToken] = useState(null);
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState(null);
   const [wishlist, setWishlist] = useState([]);
@@ -50,7 +51,7 @@ function App() {
   const autCheck = () => {
     fetchSession().then(data => {
       setIsAuthenticated(data.is_authenticated)
-      
+      setCsrfToken(data.token)
       // Check the status directly from the data server to avoid bugs
       if (data.is_authenticated ) {
         setUserId(data.user_id)
@@ -124,8 +125,8 @@ function App() {
           wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
           logoutSuccess={autCheck} /> : <Navigate to="/login" />} />
         {/* Avoid users to login or register if they are login */}
-        <Route path="/login" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Login loginSuccess={autCheck}/>} />
-        <Route path="/register" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Register registerSuccess={autCheck}/>} />
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Login loginSuccess={autCheck} csrfToken={csrfToken}/>} />
+        <Route path="/register" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Register registerSuccess={autCheck} csrfToken={csrfToken}/>} />
         {/* If path doesn't exists send the user to the default view */}
         {<Route path="*" element={<Navigate to="/" replace />} />}
       </Routes>
