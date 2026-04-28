@@ -4,6 +4,9 @@ import { Menu, MenuButton, MenuItem,MenuItems} from "@headlessui/react";
 import { Link } from 'react-router-dom';
 
 function Categories() {
+    // API base url
+    const apiBase = import.meta.env.VITE_API_URL
+
     // set States
     const [categories, setCategories] = useState([]);
 
@@ -12,7 +15,7 @@ function Categories() {
         // Get cstore categories
         async function fetchCategories() {
             try {
-                const response = await fetch(`/api/categories`, {
+                const response = await fetch(`${apiBase}/api/categories`, {
                     credentials: "include",
                 });
 
