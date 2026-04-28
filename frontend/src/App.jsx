@@ -77,7 +77,7 @@ function App() {
 
   // Call useEffect to render according to status
   useEffect(() => {
-    fetch(`${apiBase}/api/csrf`, { 
+    fetch(`${apiBase}/api/csrf/`, { 
       credentials: "include",
     }).then(() => autCheck())  
   }, []) 

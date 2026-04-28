@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     # Send the CSRF token to the client so it can be included in subsequent requests 
     # and add data of user if is authenticated
-    path("api/csrf", views.csrf, name="csrf"),
+    path("api/csrf/", views.csrf, name="csrf"),
     path("api/get_session/", views.get_session, name="get_session"),
 
     # Landing page and products views
