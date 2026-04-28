@@ -29,6 +29,9 @@ import Register from "./components/general/register";
 import { useEffect, useState } from 'react';
 
 function App() {
+  // API base url
+  const apiBase = import.meta.env.VITE_API_URL
+
   // Set state for user
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState(null);
@@ -74,7 +77,9 @@ function App() {
 
   // Call useEffect to render according to status
   useEffect(() => {
-    autCheck()  
+    fetch(`${apiBase}/api/csrf`, { 
+      credentials: "include",
+    }).then(() => autCheck())  
   }, []) 
 
   if (isLoading) {

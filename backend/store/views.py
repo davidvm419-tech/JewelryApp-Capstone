@@ -26,7 +26,11 @@ from .helpers import paginate
 
 # Service rate fee convert the fee as a Decimal from a string for precision
 SERVICE_RATE = Decimal("2.00")
+
+# Generate cookie for production environments
 @ensure_csrf_cookie
+def csrf(request):
+    return JsonResponse({"detail": "CSRF cookie set successfully"})
 # Generate token and send user information if is authenticated for user information
 def get_session(request):
     is_authenticated = request.user.is_authenticated
@@ -43,8 +47,7 @@ def get_session(request):
         
         # Return response
         return JsonResponse({
-            "token": get_token(request),
-            "detail": "CSRF cookie set successfully",   
+            "token": get_token(request),  
             "is_authenticated": is_authenticated,
             "user_id": user_id,
             "username": request.user.username,
