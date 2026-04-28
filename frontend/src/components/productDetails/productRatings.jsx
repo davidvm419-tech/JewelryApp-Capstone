@@ -4,7 +4,7 @@ import {getCookie} from "../../utils";
 // Hooks
 import { useState, useEffect } from "react";
 
-function ProductRatings({ratings, avg_rating, productId, userId}) {
+function ProductRatings({ratings, avg_rating, productId, userId, csrfToken }) {
     // API
     const apiBase = import.meta.env.VITE_API_URL
     
@@ -41,7 +41,7 @@ function ProductRatings({ratings, avg_rating, productId, userId}) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": getCookie("csrftoken"),
+                "X-CSRFToken": csrfToken,
             },
             body: JSON.stringify({
                 rating: ratingValue,
@@ -70,7 +70,7 @@ function ProductRatings({ratings, avg_rating, productId, userId}) {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-CSRFToken": csrfToken,
                 },
                 body: JSON.stringify({
                     rating: ratingValue,

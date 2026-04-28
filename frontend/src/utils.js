@@ -66,13 +66,13 @@ export async function fetchCatalog(page=1, categoryId) {
 }
 
 // Utility functions to add and delete wishlists items
-export async function addToWishList(productId) {
+export async function addToWishList(productId, csrfToken) {
     try {
         const response = await fetch(`${apiBase}/api/wishlist/add/${productId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": getCookie("csrftoken"),
+                "X-CSRFToken": csrfToken,
             },
             credentials: "include",
         });
@@ -85,13 +85,13 @@ export async function addToWishList(productId) {
     }
 }
 
-export async function deleteFromWishList(wishlistItemId) {
+export async function deleteFromWishList(wishlistItemId, csrfToken) {
     try {
         const response = await fetch(`${apiBase}/api/wishlist/delete/${wishlistItemId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": getCookie("csrftoken"),
+                "X-CSRFToken": csrfToken,
             },
             credentials: "include",
         });
@@ -105,14 +105,14 @@ export async function deleteFromWishList(wishlistItemId) {
 
 
 // Utility functions to add and delete cart items
-export async function addToCart(productId) {
+export async function addToCart(productId, csrfToken) {
 
     try {
         const response = await fetch(`${apiBase}/api/cart/add/${productId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": getCookie("csrftoken"),
+                "X-CSRFToken": csrfToken,
             },
             credentials: "include",
         });
@@ -124,13 +124,13 @@ export async function addToCart(productId) {
     }
 }
 
-export async function deleteFromCart(cartItemId) {
+export async function deleteFromCart(cartItemId, csrfToken) {
     try {
         const response = await fetch(`${apiBase}/api/cart/delete/${cartItemId}`, {
             method: "delete",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": getCookie("csrftoken"),
+                "X-CSRFToken": csrfToken,
             },
             credentials: "include",
         })

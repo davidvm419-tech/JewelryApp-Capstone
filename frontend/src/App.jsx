@@ -94,34 +94,34 @@ function App() {
         <Route path="/catalog" element={<Catalog 
           isAuthenticated={isAuthenticated} userId={userId} username={username} 
           wishlist={wishlist} shoppingCart={shoppingCart} 
-          wishListChange={autCheck} logoutSuccess={autCheck} />}/>
+          wishListChange={autCheck} logoutSuccess={autCheck} csrfToken={csrfToken} />} />
         {/* Route to specific category */}
         <Route path="/catalog/:id" element={<Catalog 
           isAuthenticated={isAuthenticated} userId={userId} username={username} 
           wishlist={wishlist} shoppingCart={shoppingCart} 
-          wishListChange={autCheck} logoutSuccess={autCheck} />}/>
+          wishListChange={autCheck} logoutSuccess={autCheck} csrfToken={csrfToken} />} />
         {/* Route to product details */}
         <Route path="/product/:id" element={<ProductDetails 
           isAuthenticated={isAuthenticated} userId={userId} username={username} 
           wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
-          onCartChange={autCheck} logoutSuccess={autCheck} />} />
+          onCartChange={autCheck} logoutSuccess={autCheck} csrfToken={csrfToken} />} />
         {/* Route to wishlist */}
         <Route path="/wishlist" element={isAuthenticated ? <Wishlist wishlist={wishlist} 
-          wishListChange={autCheck} onCartChange={autCheck} /> : <Navigate to="/login" />}/>
+          wishListChange={autCheck} onCartChange={autCheck} csrfToken={csrfToken} /> : <Navigate to="/login" />}/>
         {/* Route to cart */}
         <Route path="/cart" element={isAuthenticated ? <ShoppingCart 
           shoppingCart={shoppingCart} cartTotalValue={cartTotalValue} serviceRate={serviceRate}
-          onCartChange={autCheck} /> : <Navigate to="/login" /> }/>
+          onCartChange={autCheck} csrfToken={csrfToken} /> : <Navigate to="/login" /> }/>
         {/* Route to orders */}
         <Route path="/orders" element={isAuthenticated ? <UserOrders 
           isAuthenticated={isAuthenticated} userId={userId} username={username} 
-          wishlist={wishlist} shoppingCart={shoppingCart} logoutSuccess={autCheck}/>
+          wishlist={wishlist} shoppingCart={shoppingCart} logoutSuccess={autCheck} csrfToken={csrfToken}/>
           : <Navigate to="/login" />} />
         {/* Route to user settings */}
         <Route path="/settings" element={isAuthenticated ? <UserSettings 
           isAuthenticated={isAuthenticated} userId={userId} username={username} 
           wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
-          logoutSuccess={autCheck} /> : <Navigate to="/login" />} />
+          logoutSuccess={autCheck} csrfToken={csrfToken} /> : <Navigate to="/login" />} />
         {/* Avoid users to login or register if they are login */}
         <Route path="/login" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Login loginSuccess={autCheck} csrfToken={csrfToken}/>} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/catalog" replace/> : <Register registerSuccess={autCheck} csrfToken={csrfToken}/>} />

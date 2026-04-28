@@ -13,7 +13,7 @@ import Pagination from '../products/pagination';
 import { useState, useEffect } from 'react';
 
 function UserOrders({ isAuthenticated, userId, username,  
-                    wishlist, shoppingCart, logoutSuccess }) {
+                    wishlist, shoppingCart, logoutSuccess, csrfToken }) {
     // API
     const apiBase = import.meta.env.VITE_API_URL
     
@@ -31,7 +31,7 @@ function UserOrders({ isAuthenticated, userId, username,
                 method: "POST",
                  headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-CSRFToken": csrfToken,
                 },
                 credentials: "include",
                 });
@@ -64,7 +64,7 @@ function UserOrders({ isAuthenticated, userId, username,
             {/* navbar*/}
             <Navbar isAuthenticated={isAuthenticated} userId={userId} username={username} 
                 wishlist={wishlist} shoppingCart={shoppingCart} orders={orders} 
-                logoutSuccess={logoutSuccess} />
+                logoutSuccess={logoutSuccess} csrfToken={csrfToken} />
                 {/* Order hostory container */}
                 <div className="flex-grow flex flex-col max-w-4xl mx-auto w-full p-6">
                 <h2 className="text-3xl font-black text-[#1B3A57] mb-8">Orders History</h2>

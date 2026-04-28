@@ -4,7 +4,7 @@ import {addToWishList, deleteFromWishList, fetchSession} from "../../utils";
 // Hooks
 import { useState, useEffect } from "react";
 
-function WishlistHeart({ isAuthenticated, productId, wishlist, wishListChange}) {
+function WishlistHeart({ isAuthenticated, productId, wishlist, wishListChange, csrfToken }) {
     
     // Set states
     const [wishChange, setWishChange] =useState(wishlist);
@@ -33,7 +33,7 @@ function WishlistHeart({ isAuthenticated, productId, wishlist, wishListChange}) 
         e.preventDefault()
         e.stopPropagation()
         // Send data to backend
-        const {data, ok} = await addToWishList(productId);
+        const {data, ok} = await addToWishList(productId, csrfToken);
         // Get response
         if (!ok) {
             setError(data.error)
@@ -51,7 +51,7 @@ function WishlistHeart({ isAuthenticated, productId, wishlist, wishListChange}) 
         e.preventDefault()
         e.stopPropagation()
         // Send data to backend
-        const {data, ok} = await deleteFromWishList(wishlistItemId);
+        const {data, ok} = await deleteFromWishList(wishlistItemId, csrfToken);
         // Get response
         if (!ok) {
             setError(data.error)

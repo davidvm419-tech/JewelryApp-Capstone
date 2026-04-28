@@ -5,7 +5,7 @@ import {getCookie} from "../../utils";
 import { useState, useEffect } from "react";
 
 
-function ProductComments({ comments, productId, userId }) {
+function ProductComments({ comments, productId, userId, csrfToken }) {
     // API
     const apiBase = import.meta.env.VITE_API_URL
 
@@ -37,7 +37,7 @@ function ProductComments({ comments, productId, userId }) {
             const response = await fetch(`${apiBase}/api/comment/${productId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", 
-                    "X-CSRFToken": getCookie("csrftoken"), 
+                    "X-CSRFToken": csrfToken, 
                 },
                 body: JSON.stringify({ 
                     comment: commentInput 
@@ -67,7 +67,7 @@ function ProductComments({ comments, productId, userId }) {
                 method: "PUT",
                 headers: { 
                     "Content-Type": "application/json", 
-                    "X-CSRFToken": getCookie("csrftoken") 
+                    "X-CSRFToken": csrfToken, 
                 },
                 body: JSON.stringify(
                     { comment: commentInput 
@@ -104,7 +104,7 @@ function ProductComments({ comments, productId, userId }) {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-CSRFToken": csrfToken,
                 },
                 // No body is a standard
                 credentials: "include",

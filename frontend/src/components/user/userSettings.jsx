@@ -12,7 +12,7 @@ import Footer from '../general/footer';
 import { useState, useEffect } from 'react';
 
 function UserSettings({ isAuthenticated, userId, username,  
-                    wishlist, shoppingCart, logoutSuccess }) {
+                    wishlist, shoppingCart, logoutSuccess , csrfToken }) {
 
     // API
     const apiBase = import.meta.env.VITE_API_URL
@@ -71,7 +71,7 @@ function UserSettings({ isAuthenticated, userId, username,
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-CSRFToken": getCookie("csrftoken"),
+                        "X-CSRFToken": csrfToken,
                     },
                     credentials: "include",
                 });
@@ -120,7 +120,7 @@ function UserSettings({ isAuthenticated, userId, username,
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-CSRFToken": csrfToken,
                 },
                 body: JSON.stringify(userDetails),
                 credentials: "include",
@@ -160,7 +160,7 @@ function UserSettings({ isAuthenticated, userId, username,
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-CSRFToken": csrfToken,
                 },
                 body: JSON.stringify(email),
                 credentials: "include",
@@ -201,7 +201,7 @@ function UserSettings({ isAuthenticated, userId, username,
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-CSRFToken": csrfToken,
                 },
                 body: JSON.stringify(password),
                 credentials: "include",
@@ -255,7 +255,7 @@ function UserSettings({ isAuthenticated, userId, username,
         <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
             <Navbar isAuthenticated={isAuthenticated} userId={userId} username={username} 
                 wishlist={wishlist} shoppingCart={shoppingCart} 
-                logoutSuccess={logoutSuccess} />
+                logoutSuccess={logoutSuccess} csrfToken={csrfToken} />
 
             <div className="max-w-6xl mx-auto p-6 mt-10 w-full flex-grow">
                 <div className="mb-10 ml-4">

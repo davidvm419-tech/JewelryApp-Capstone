@@ -4,7 +4,7 @@ import {addToCart, deleteFromCart } from "../../utils";
 // Hooks
 import { useState, useEffect } from "react";
 
-function ProductButtons({ isAuthenticated, productId, shoppingCart, onCartChange }) {
+function ProductButtons({ isAuthenticated, productId, shoppingCart, onCartChange, csrfToken }) {
     
     // Set states
     const [cartChange, setCartChange] = useState(shoppingCart);
@@ -28,7 +28,7 @@ function ProductButtons({ isAuthenticated, productId, shoppingCart, onCartChange
     // Handle add to cart
     async function handleAdd() {
         // Send data to backend
-        const {data, ok} = await addToCart(productId);
+        const {data, ok} = await addToCart(productId, csrfToken);
         // Get response
         if (!ok) {
             setError(data.error)
@@ -43,7 +43,7 @@ function ProductButtons({ isAuthenticated, productId, shoppingCart, onCartChange
     // Handle delete from cart
     async function handleDelete(cartItemId) {
         // Send data to backend
-        const {data, ok} = await deleteFromCart(cartItemId)
+        const {data, ok} = await deleteFromCart(cartItemId, csrfToken)
         // Get response
         if (!ok) {
             setError(data.error)

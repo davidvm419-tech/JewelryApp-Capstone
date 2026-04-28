@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { getCookie } from '../../utils';
 
 
-function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart, logoutSuccess }) {
+function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart, logoutSuccess, csrfToken }) {
     // API
     const apiBase = import.meta.env.VITE_API_URL
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart
         try {
             const response = await fetch(`${apiBase}/api/logout/`, {
                 method: "POST",
-                headers: {"X-CSRFToken": getCookie("csrftoken")},
+                headers: {"X-CSRFToken": csrfToken},
                 credentials: "include",
             });
 

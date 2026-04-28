@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom"
 
 
 function ProductDetails({ isAuthenticated, userId, username,  
-                        wishlist, shoppingCart, onCartChange, logoutSuccess }) {
+                        wishlist, shoppingCart, onCartChange, logoutSuccess, csrfToken }) {
     
     // API
     const apiBase = import.meta.env.VITE_API_URL
@@ -72,7 +72,7 @@ function ProductDetails({ isAuthenticated, userId, username,
         <div className="min-h-screen bg-slate-50 flex flex-col">
             {/* navbar*/}
             <Navbar isAuthenticated={isAuthenticated} userId={userId} username={username} 
-                wishlist={wishlist} shoppingCart={shoppingCart} logoutSuccess={logoutSuccess} />
+                wishlist={wishlist} shoppingCart={shoppingCart} logoutSuccess={logoutSuccess} csrfToken={csrfToken}/>
             <main className="flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
                 <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden mb-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
@@ -99,7 +99,7 @@ function ProductDetails({ isAuthenticated, userId, username,
                                     </p>
                                 </div>
                                 <div className="flex flex-col md:flex-row gap-4 w-full">
-                                    <ProductButtons isAuthenticated={isAuthenticated} productId={productId} shoppingCart={shoppingCart} onCartChange={onCartChange}/>
+                                    <ProductButtons isAuthenticated={isAuthenticated} productId={productId} shoppingCart={shoppingCart} onCartChange={onCartChange} csrfToken={csrfToken} />
                                 </div>
                             </div>
                         </div>
@@ -107,10 +107,10 @@ function ProductDetails({ isAuthenticated, userId, username,
                 </div>
                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-full">
-                        <ProductRatings ratings={ratings} avg_rating={product.rating_avg} productId={productId} userId={userId} />
+                        <ProductRatings ratings={ratings} avg_rating={product.rating_avg} productId={productId} userId={userId} csrfToken={csrfToken} />
                     </div>
                     <div className="bg-white rounded-2xl shadow-sm border border-slate-200 h-medium">                
-                        <ProductComments comments={comments} productId={productId} userId={userId} />
+                        <ProductComments comments={comments} productId={productId} userId={userId} csrfToken={csrfToken} />
                     </div>
                 </div>
             </main>

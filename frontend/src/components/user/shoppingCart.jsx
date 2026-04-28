@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 // Hooks
 import { useState, useEffect } from "react";
 
-function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue, serviceRate }) {
+function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue, serviceRate, csrfToken }) {
     // API
     const apiBase = import.meta.env.VITE_API_URL
     
@@ -51,7 +51,7 @@ function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue, serviceRate 
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-CSRFToken": csrfToken,
                 },
                 credentials: "include",
             });
@@ -79,7 +79,7 @@ function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue, serviceRate 
     async function handleDelete(itemId) {
         try {
             // Send data to backend
-            const {data, ok} = await deleteFromCart(itemId)
+            const {data, ok} = await deleteFromCart(itemId, csrfToken)
             // Get response
             if (!ok) {
                 setError(data.error)
@@ -104,7 +104,7 @@ function ShoppingCart({ shoppingCart, onCartChange, cartTotalValue, serviceRate 
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-CSRFToken": csrfToken,
                 },
                 credentials: "include",
             });

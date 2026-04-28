@@ -15,7 +15,7 @@ import { Link, useParams } from 'react-router-dom';
 import { fetchCatalog } from '../../utils';
 
 export default function Catalog({ isAuthenticated, userId, username,  
-                                  wishlist, shoppingCart, wishListChange, logoutSuccess }) {
+                                  wishlist, shoppingCart, wishListChange, logoutSuccess, csrfToken }) {
   // Set state ofr loading to better user experience
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
@@ -64,7 +64,7 @@ export default function Catalog({ isAuthenticated, userId, username,
     <div className="min-h-screen bg-slate-50 flex flex-col">
       {/* navbar*/}
       <Navbar isAuthenticated={isAuthenticated} userId={userId} username={username} 
-        wishlist={wishlist} shoppingCart={shoppingCart} logoutSuccess={logoutSuccess} />
+        wishlist={wishlist} shoppingCart={shoppingCart} logoutSuccess={logoutSuccess} csrfToken={csrfToken} />
       
       {/* Catalog content*/}
       <main className="max-w-7xl mx-auto py-12 px-4 flex-grow">
@@ -75,7 +75,7 @@ export default function Catalog({ isAuthenticated, userId, username,
             <Link key={product.id} to={`/product/${product.id}`}>
               <div className="relative group w-72 bg-white shadow-md rounded-xl duration-500 
                   hover:scale-105 hover:shadow-xl">
-                  <WishlistHeart isAuthenticated={isAuthenticated} productId={product.id} wishlist={wishlist} wishListChange={wishListChange}/>
+                  <WishlistHeart isAuthenticated={isAuthenticated} productId={product.id} wishlist={wishlist} wishListChange={wishListChange} csrfToken={csrfToken}/>
                   {/* Avoid crash if not image is uploaded and display a placeholder */}
                   {product.main_image ? (
                     <img className="h-80 w-72 object-cover rounded-t-xl"

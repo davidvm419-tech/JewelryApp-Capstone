@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 // Hooks
 import { useState, useEffect } from "react";
 
-function Wishlist({ wishlist, wishListChange, onCartChange }) {
+function Wishlist({ wishlist, wishListChange, onCartChange, csrfToken }) {
     // Set navigator
     const navigate = useNavigate();
 
@@ -30,7 +30,7 @@ function Wishlist({ wishlist, wishListChange, onCartChange }) {
     // Handle add to cart
     async function handleAdd(productId, itemId) {
         // Send data to backend
-        const {data, ok} = await addToCart(productId);
+        const {data, ok} = await addToCart(productId, csrfToken);
         // Get response
         if (!ok) {
             setError(data.error)
@@ -47,7 +47,7 @@ function Wishlist({ wishlist, wishListChange, onCartChange }) {
     // Handle delete
     async function handleDelete(wishlistItemId) {
         // Send data to backend
-        const {data, ok} = await deleteFromWishList(wishlistItemId);
+        const {data, ok} = await deleteFromWishList(wishlistItemId, csrfToken);
         // Get response
         if (!ok) {
             setError(data.error)
