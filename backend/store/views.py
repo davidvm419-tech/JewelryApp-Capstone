@@ -12,6 +12,7 @@ from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 
 import json
@@ -25,7 +26,7 @@ from .helpers import paginate
 
 # Service rate fee convert the fee as a Decimal from a string for precision
 SERVICE_RATE = Decimal("2.00")
-
+@ensure_csrf_cookie
 # Generate token and send user information if is authenticated for user information
 def get_session(request):
     is_authenticated = request.user.is_authenticated
@@ -43,6 +44,7 @@ def get_session(request):
         # Return response
         return JsonResponse({
             "token": get_token(request),
+            "detail": "CSRF cookie set successfully",   
             "is_authenticated": is_authenticated,
             "user_id": user_id,
             "username": request.user.username,
