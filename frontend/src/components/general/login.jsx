@@ -1,5 +1,4 @@
 import React from 'react';
-import {getCookie} from "../../utils";
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 

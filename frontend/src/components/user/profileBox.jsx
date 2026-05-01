@@ -4,9 +4,6 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-// Util function
-import { getCookie } from '../../utils';
-
 
 function ProfileBox({ isAuthenticated, userId, username,  wishlist, shoppingCart, logoutSuccess, csrfToken }) {
     // API

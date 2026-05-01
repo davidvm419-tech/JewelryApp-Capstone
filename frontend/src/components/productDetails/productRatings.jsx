@@ -1,6 +1,3 @@
-// Util function
-import {getCookie} from "../../utils";
-
 // Hooks
 import { useState, useEffect } from "react";
 

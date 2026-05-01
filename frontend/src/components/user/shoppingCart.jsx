@@ -1,5 +1,5 @@
 // Utils
-import { deleteFromCart, getCookie } from "../../utils";
+import { deleteFromCart } from "../../utils";
 
 // Navigation
 import { useNavigate } from "react-router-dom";

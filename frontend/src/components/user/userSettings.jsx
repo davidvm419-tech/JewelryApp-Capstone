@@ -1,6 +1,3 @@
-// Utils
-import { getCookie } from "../../utils";
-
 // Utility component
 import Loading from '../general/loading';
 
